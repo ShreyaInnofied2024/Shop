@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => 'a8206962608b874f21023727a93c5ef66a3207ea',
         'name' => '__root__',
         'dev' => true,
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => 'a8206962608b874f21023727a93c5ef66a3207ea',
             'dev_requirement' => false,
         ),
         'paypal/rest-api-sdk-php' => array(
@@ -26,6 +26,15 @@
             'install_path' => __DIR__ . '/../paypal/rest-api-sdk-php',
             'aliases' => array(),
             'reference' => '72e2f2466975bf128a31e02b15110180f059fc04',
+            'dev_requirement' => false,
+        ),
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v6.9.2',
+            'version' => '6.9.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
+            'aliases' => array(),
+            'reference' => 'a7b17b42fa4887c92146243f3d2f4ccb962af17c',
             'dev_requirement' => false,
         ),
         'psr/log' => array(

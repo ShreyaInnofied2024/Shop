@@ -8,8 +8,14 @@
 
 <h1>Checkout</h1>
 <div id="paypal-button-container"></div>
+<button onclick="goBack()">Back</button>
 
 <script>
+
+function goBack() {
+    window.location.href = "<?php echo URLROOT; ?>/orderController/cancel"; // Change to your desired URL
+}
+
     var price = <?php echo json_encode($data['totalPrice']); ?>; // Use json_encode to ensure proper formatting
 
     paypal.Buttons({

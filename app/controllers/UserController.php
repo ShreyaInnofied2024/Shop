@@ -159,7 +159,8 @@ class UserController extends Controller{
         $data['password']=password_hash($data['password'],PASSWORD_DEFAULT);
         if($this->user->changePassword($data)){
             flash('user_message',"Password Changed");
-            redirect(URLROOT);
+
+        redirect('userController/login');
         }else{
             die('Something went wrong');
         }

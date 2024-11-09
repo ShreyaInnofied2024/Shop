@@ -1,11 +1,14 @@
 <?php
+include('/var/www/html/shopMVC2/app/services/MailService.php');
 class OrderController extends Controller{
     private $order;
     private $cart;
+    private $product;
 
     public function __construct() {
         $this->order = $this->model('OrderModel');
         $this->cart=$this->model('CartModel');
+        $this->product=$this->model('ProductModel');
     }
 
     public function checkout(){
@@ -47,19 +50,14 @@ public function payment() {
                 'orderId'=>$orderId,
                 'totalPrice'=>$totalPrice
             ];
-            if($_ADDRESS['shipping_method']=='Paypal'){
-            // Redirect to PayPal with necessary data
             $this->view('paypal/index',$data);
-            }
-            if($_ADDRESS['shipping_method']=='Stripe'){
-                $this->view('stripe/view',$data);
-            }
         } else {
             // Handle error if order couldn't be saved
             redirect('orderController/cancel');
             exit();
         }
     }
+    
 }
 
 public function success() {
@@ -67,7 +65,19 @@ public function success() {
         $user_id=$_SESSION['user_id'];
         $orderId = $_SESSION['pending_order_id'];
         $this->order->updateOrderStatus($orderId, 'completed');
+        $products=$this->cart->getUserCart($user_id);
+        foreach ($products as $product) {
+            $product_id = $product->product_id;
+            $quantity = $product->quantity;
+            $this->product->updateproductQuantityOnPayment($product_id, $quantity);
+        }
         $this->cart->clearCart($user_id);
+
+        $mailService = new MailService();
+        $to = $user_id;
+        $subject = 'Order Confirmation';
+        $body = 'Your order has been successfully placed !';
+        $mailService->sendEmail($to, $subject, $body);
         $data=[];
         $this->view('paypal/success',$data);
         exit();
@@ -81,19 +91,14 @@ public function cancel() {
         // First, delete the order from the database
         if ($this->order->deleteOrder($orderId)) {
             unset($_SESSION['pending_order_id']);
-            // Redirect to the cart or a cancellation view
-            redirect('cartController');
-        } else {
-            // Handle error during deletion
-            // You can log the error or show a message
-            redirect('orderController/error'); // Redirect to an error handling page
+            $this->view('paypal/cancel',$data=[]);
         }
     } else {
-        // If no pending order exists, redirect to the cart
         redirect('cartController');
     }
 }
 
 }
+
 
 

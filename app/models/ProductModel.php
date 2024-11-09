@@ -126,4 +126,14 @@ public function deleteByCategory($category){
         return false;
     }
 }
+public function updateproductQuantityOnPayment($productId,$quantity){
+    $this->db->query('UPDATE product SET quantity = quantity - :quantity WHERE id = :product_id');
+    $this->db->bind(':quantity',$quantity);
+    $this->db->bind('product_id',$productId);
+    if($this->db->execute()){
+        return true;
+    }else{
+        return false;
+    }
+}
 }

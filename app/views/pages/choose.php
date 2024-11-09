@@ -4,6 +4,9 @@
 <?php if(!isAdmin()){
     echo "<a href='" . URLROOT . "/userController/changePassword/" . $_SESSION['user_email'] . "'><button>Change Password</button></a>";
     echo "<a href='" . URLROOT . "/cartController/show/'><button>Cart</button></a>";
-    
+}
+if(isAdmin()){
+
+    echo "<a href='" .URLROOT. "/adminDashboard/showDashboard/'><button>Dashboard</button></a>";
 }
 ?>
