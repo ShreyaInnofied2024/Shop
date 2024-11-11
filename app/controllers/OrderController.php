@@ -4,11 +4,13 @@ class OrderController extends Controller{
     private $order;
     private $cart;
     private $product;
+    private $stripeServices;
 
     public function __construct() {
         $this->order = $this->model('OrderModel');
         $this->cart=$this->model('CartModel');
         $this->product=$this->model('ProductModel');
+        $this->stripeServices = new StripeService();
     }
 
     public function checkout(){
@@ -26,6 +28,8 @@ class OrderController extends Controller{
 
 
 public function payment() {
+    $user_id=$_SESSION['user_id'];
+    $cartItems = $this->cart->getUserCart($user_id);
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_ADDRESS = filter_input_array(INPUT_POST);
         $address = trim($_ADDRESS['line1']) . " " . trim($_ADDRESS['line2']) . " " .
@@ -50,7 +54,19 @@ public function payment() {
                 'orderId'=>$orderId,
                 'totalPrice'=>$totalPrice
             ];
+            if($_ADDRESS['shipping_method']=='PayPal'){
             $this->view('paypal/index',$data);
+            }
+            if($_ADDRESS['shipping_method']=='Stripe'){
+                $checkoutURL = $this->stripeServices->createCheckoutSession($cartItems,$user_id);
+            if ($checkoutURL) {
+                // Redirect to Stripe Checkout page
+                header("Location: " . $checkoutURL);
+                exit();
+            } else {
+                //
+            }
+                }
         } else {
             // Handle error if order couldn't be saved
             redirect('orderController/cancel');
