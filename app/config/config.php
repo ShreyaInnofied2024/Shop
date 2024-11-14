@@ -6,6 +6,6 @@ define('DB_NAME','Product');
 
 define('APPROOT',dirname(dirname(__FILE__)));
 define('URLROOT','http://localhost/shopMVC2');
-define('SITENAME', 'SHOP');
+define('SITENAME', 'Cosmetic Store');
 define('APPVERSION','1.0.0');
 

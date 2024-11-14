@@ -1,0 +1,357 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.product-card img {
+    height: 250px;
+    object-fit: cover;
+}
+.navbar-brand{
+    margin-left: 50px;
+    font-weight: bold;
+}
+
+.navbar-nav{
+    margin-right: 50px;
+
+}
+
+footer .container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+footer h4 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+footer p {
+    font-size: 1rem;
+}
+
+footer .form-control {
+    border-radius: 0.25rem;
+}
+
+footer button {
+    background-color: #f8f9fa;
+    color: #343a40;
+    border-radius: 0.25rem;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+
+footer button:hover {
+    background-color: #e2e6ea;
+}
+
+footer .text-center p {
+    font-size: 0.875rem;
+    color: #adb5bd;
+}
+
+footer ul li {
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: #343a40; /* Dark background color */
+}
+
+
+footer ul {
+    padding-left: 0;
+}
+
+footer .text-center p {
+    font-size: 0.875rem;
+    color: #adb5bd;
+}
+
+
+/* General styles for carousel images */
+.carousel-image {
+    object-fit: contain; /* Ensures images fit within the container */
+    height: 500px;       /* Consistent height for all images */
+    max-width: 100%;     /* Restricts image width to prevent overflow */
+    display: block;      /* Ensure images are treated as block elements */
+    margin: 0 auto;      /* Center images horizontally */
+}
+
+
+/* Carousel controls styling */
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    border-radius: 50%;                   /* Make controls circular */
+    padding: 10px;                        /* Add padding for better visibility */
+}
+
+/* Styling for carousel captions */
+.carousel-heading {
+    background-color: rgba(255, 165, 0, 0.8); /* Semi-transparent orange */
+    color: white;                             /* White text */
+    padding: 5px 15px;                        /* Add padding for readability */
+    border-radius: 5px;                       /* Rounded corners */
+    display: inline-block;                    /* Center text block */
+    font-size: 1.2rem;                        /* Slightly larger font */
+}
+
+/* Custom indicators styling */
+.carousel-indicators button {
+    background-color: #FFA500; /* Default indicator color */
+    border: none;              /* Remove borders */
+}
+
+.carousel-indicators .active {
+    background-color: #FF4500; /* Active indicator color */
+}
+
+/* Product Card Image Styling */
+.card-img-top {
+    object-fit: cover;  /* Ensures the image covers the card's area without distortion */
+    height: 270px;      /* Set a consistent image height */
+}
+
+/* Product Card Styling */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Adds a hover effect with shadow */
+}
+
+/* Card Text Styling */
+.card-body {
+    text-align: center;
+}
+
+.jumbotron {
+    background-image: url('/shopMVC2/public/img/cosmetics-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 250px;
+    display: grid;
+     place-items: center;
+     margin-bottom: 0;
+}
+
+.invalid-feedback {
+    display: none;
+    color: red;
+    font-size: 0.875rem;
+}
+
+#successMessage {
+    display: none;
+}
+
+.redirecthome{
+    text-decoration: none;
+    color: white;
+}
+
+.icon{
+    margin-right:5px;
+}
+
+.text{
+    text-decoration: none;
+    color: white;
+}
+
+
+/* General responsiveness for smaller screens */
+@media (max-width: 768px) {
+    /* Navbar brand and nav items */
+    .navbar-brand {
+        font-size: 1.2rem; /* Reduce font size */
+        margin-left: 20px;
+    }
+    .navbar-nav {
+        padding-left: 20px;
+    }
+
+    /* Jumbotron adjustments */
+    .jumbotron {
+        height: 200px; /* Reduce height */
+    }
+    .jumbotron h1 {
+        font-size: 1.5rem; /* Smaller font for titles */
+    }
+    .jumbotron p {
+        font-size: 0.9rem; /* Smaller font for subtitle */
+    }
+
+    /* Footer adjustments */
+    footer h4 {
+        font-size: 1.2rem;
+    }
+    footer p {
+        font-size: 0.9rem;
+    }
+    footer ul li {
+        font-size: 0.9rem;
+    }
+
+    /* Card image and button adjustments */
+    .card-img-top {
+        width: 50%;
+    }
+
+    .card .btn {
+        font-size: 0.9rem; /* Smaller font for buttons */
+    }
+
+    /* Product card image adjustments */
+    .product-card img {
+        height: 200px;
+    }
+
+    /* Contact form input and button adjustments */
+    footer .form-control {
+        font-size: 0.9rem;
+    }
+    footer button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    .carousel-image {
+        height: 300px;
+    }
+    .carousel-heading {
+        font-size: 1rem; /* Smaller font size for carousel captions */
+    }
+
+    footer .container {
+        padding-left: 20px; /* Add padding on smaller screens */
+        padding-right: 20px;
+    }
+
+    footer .row {
+        padding: 0 10px; /* Additional padding for footer sections */
+    }
+    
+    footer .text-center {
+        padding-bottom: 10px;
+    }
+
+    .drawer {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        background-color: #000000c5;
+        transition: left 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .drawer ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .drawer ul li {
+        padding: 15px;
+    }
+    
+    .drawer ul li a {
+        display: list-item;
+        border-radius: 5px;
+        margin: 5px;
+        color: white;
+        text-decoration: none;
+        border: 2px solid #949393;
+        padding: 10px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .drawer ul li a:hover {
+        background-color: #949393;
+        padding: px;
+    }
+    
+    /* Close button inside the drawer */
+    .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 30px;
+        cursor: pointer;
+        position: absolute;
+        left: 10px;
+        top: 30px;
+        display: block;
+    }
+
+    .drawer.open {
+        left: 0;
+        }
+}
+
+#login,#register{
+    background-color: #f8f3ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+}
+.login-container ,.register-container{
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+.login-container h2 , .register-container h2{
+    color: #b38b6d;
+    margin-bottom: 20px;
+    font-family: 'Georgia', serif;
+}
+.login-container input,.register-container input {
+    border-radius: 30px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group{
+    margin-bottom: 10px;
+}
+.login-btn , .register-btn {
+    background-color: #b38b6d;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    color: #fff;
+    font-size: 16px;
+    margin-top: 20px;
+}
+.login-btn:hover , .register-btn:hover{
+    background-color: #9f775c;
+}
+.form-footer {
+    margin-top: 20px;
+}
+.form-footer a {
+    color: #b38b6d;
+    text-decoration: none;
+}
+.form-footer a:hover {
+    text-decoration: underline;
+}

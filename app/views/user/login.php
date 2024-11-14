@@ -1,15 +1,19 @@
-<?php require APPROOT . '/views/inc/header.php'; ?>
-<h1> Login </h1>
- <form action="<?php echo URLROOT; ?>/userController/login" method="post">
- Email: <input type="email" name="email" class="<?php echo (!empty($data['email_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['email']; ?>">
-    <span><?php echo $data['email_err']; ?></span><br>
-Password: <input type="password" name="password" class="<?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>" value="<?php echo $data['password']; ?>">
-    <span><?php echo $data['password_err']; ?></span><br>
-
-<input type="submit">
-</form>
-
-<a href='<?php echo URLROOT; ?>/userController/register'><button>Register</button></a>
-
-<a href='<?php echo URLROOT; ?>'><button>Go Back</button></a>
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmetic Store Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="/shopMVC2/public/css/style.css">
+   <script src="index.js"></script>
+   <script src="https://kit.fontawesome.com/155c5ab2ca.js" crossorigin="anonymous"></script>
+ </head>
+</header>
+<?php require APPROOT . '/views/inc/navbar.php'; ?>
+</header>
+ <body>
+    <?php require APPROOT . '/views/user/login_form.php' ;?>
+</body>
+</html>
 
