@@ -10,7 +10,7 @@
    <script src="https://kit.fontawesome.com/155c5ab2ca.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<section id="login">
+<section id="login"> 
 <div class="login-container">
     <h2>Cosmetic Store</h2>
     <p>Please log in to continue shopping.</p>

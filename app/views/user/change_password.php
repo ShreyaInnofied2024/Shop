@@ -1,41 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo SITENAME; ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="/shopMVC2/public/css/style.css">
+   <script src="index.js"></script>
+   <script src="https://kit.fontawesome.com/155c5ab2ca.js" crossorigin="anonymous"></script>
+</head>
+    <header>
 
 <?php require APPROOT . '/views/inc/header.php'; ?>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="text-center mb-4">Change Password</h2>
-                    <form action="<?php echo URLROOT; ?>/userController/changePassword/<?php echo $data['email']; ?>" method="post">
-                        <!-- Email Field -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" id="email" 
-                                   class="form-control <?php echo (!empty($data['email_err'])) ? 'is-invalid' : ''; ?>" 
-                                   value="<?php echo $data['email']; ?>" placeholder="Enter your email">
-                            <span class="invalid-feedback"><?php echo $data['email_err']; ?></span>
-                        </div>
-                        
-                        <!-- Password Field -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">New Password</label>
-                            <input type="password" name="password" id="password" 
-                                   class="form-control <?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>" 
-                                   value="<?php echo $data['password']; ?>" placeholder="Enter your new password">
-                            <span class="invalid-feedback"><?php echo $data['password_err']; ?></span>
-                        </div>
-                        
-                        <!-- Submit Button -->
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Change Password</button>
-                        </div>
-                    </form>
-                    <div class="mt-4 text-center">
-                        <a href="<?php echo URLROOT; ?>/userController/login" class="btn btn-link">Login</a>
-                        <a href="<?php echo URLROOT; ?>" class="btn btn-link">Go Back</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </header>
+
+<body>
+<section id="login">
+<div class="login-container">
+    <h2>Change Password</h2>
+    <p>Update your account password.</p>
+    <form action="<?php echo URLROOT; ?>/userController/changePassword/<?php echo $data['email']; ?>" method="post">
+        <div class="form-group">
+                    <input type="email" name="email" id="email" 
+                           class="form-control rounded-pill <?php echo (!empty($data['email_err'])) ? 'is-invalid' : ''; ?>" 
+                           value="<?php echo $data['email']; ?>" placeholder="Enter your email" required>
+                    <span class="invalid-feedback"><?php echo $data['email_err']; ?></span>
 </div>
+        <div class="form-group">
+                    <input type="password" name="password" id="password" 
+                           class="form-control rounded-pill <?php echo (!empty($data['password_err'])) ? 'is-invalid' : ''; ?>" 
+                           placeholder="Enter your new password" required>
+                    <span class="invalid-feedback"><?php echo $data['password_err']; ?></span>
+            </div>
+        <button type="submit" class="btn login-btn btn-block">Submit</button>
+    </form>
+    <div class="form-footer">
+    <a href="<?php echo URLROOT; ?>/userController/login" class="text-decoration-none" style="color: #a27053;">Login</a> | 
+                <a href="<?php echo URLROOT; ?>" class="text-decoration-none" style="color: #a27053;">Go Back</a>
+            
+         </div>
+</div>
+    </section>
+</body>
+</html>
+
+            
+
+              
+         

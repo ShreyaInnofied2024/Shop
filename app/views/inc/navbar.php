@@ -31,10 +31,10 @@
                         </li>
                     <?php elseif ($_SESSION['user_role'] == 'Admin') : ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="#product">Product</a>
+                            <a class="nav-link" href="<?php echo URLROOT; ?>/productController">Product</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#product">Category</a>
+                            <a class="nav-link" href="<?php echo URLROOT; ?>/categoryController">Category</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo URLROOT; ?>/userController/logout">Logout</a>
