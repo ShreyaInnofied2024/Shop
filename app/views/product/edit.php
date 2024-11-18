@@ -17,7 +17,7 @@
 <body>
 <section id="login">
 <div class="login-container">
-    <h2>Add Product</h2>
+    <h2>Edit Product</h2>
     <form action="<?php echo URLROOT; ?>/productController/edit/<?php echo $data['id'];?>" method="post">
         <div class="form-group">
         <label for="name" class="form-label">Name</label>
@@ -59,7 +59,7 @@
                         <label for="category" class="form-label">Category</label>
                             <select name="category_id" id="category" 
                                     class="form-select <?php echo (!empty($data['category_err'])) ? 'is-invalid' : ''; ?>">
-                                <?php foreach ($data['category'] as $category): ?>
+                                <?php foreach ($data['categories'] as $category): ?>
                                     <option value="<?php echo $category->id; ?>" 
                                             <?php echo ($data['category'] == $category->id) ? 'selected' : ''; ?>>
                                         <?php echo $category->name; ?>
