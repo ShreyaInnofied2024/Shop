@@ -3,8 +3,13 @@
 <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) : ?>
     <?php if ($_SESSION['user_role'] == 'Customer') : ?>
         <?php require APPROOT . '/views/pages/customer.php'; ?>
-    <?php elseif ($_SESSION['user_role'] == 'Admin') : ?>
-        <?php require APPROOT . '/views/pages/admin.php'; ?>
+    <?php elseif ($_SESSION['user_role'] == 'Admin') :?>
+        <?php 
+    // Load Admin Dashboard Controller
+    require_once APPROOT . '/controllers/AdminDashboard.php';
+    $controller = new AdminDashboard();
+    $controller->showDashboard();
+    ?>
     <?php endif; ?>
 <?php endif; ?>
 

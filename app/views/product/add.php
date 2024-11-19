@@ -18,7 +18,7 @@
 <section id="login">
 <div class="login-container">
     <h2>Add Product</h2>
-    <form action="<?php echo URLROOT; ?>/productController/add" method="post">
+    <form action="<?php echo URLROOT; ?>/productController/add" method="post" enctype="multipart/form-data">
         <div class="form-group">
         <input type="text" name="name" id="name" 
                                    class="form-control <?php echo (!empty($data['name_err'])) ? 'is-invalid' : ''; ?>" 
@@ -37,6 +37,12 @@
                                    value="<?php echo $data['price']; ?>" placeholder="Enter price">
                             <span class="invalid-feedback"><?php echo $data['price_err']; ?></span>
                         </div>
+       
+    <label for="product_image">Product Image:</label>
+    <input type="file" id="product_image" name="product_image" accept="image/*" required>
+
+
+
 
                         <div class="form-group">
                         <label for="type" class="form-label">Product Type</label>

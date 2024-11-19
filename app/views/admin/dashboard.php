@@ -11,7 +11,7 @@
                 <div class="card text-white bg-primary shadow mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Total Orders</h5>
-                        <h3><?= $data['totalOrders']; ?></h3>
+                        <h3><?php echo $data['totalOrders']; ?></h3>
                     </div>
                 </div>
             </div>

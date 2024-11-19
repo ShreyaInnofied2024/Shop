@@ -23,20 +23,27 @@ public function getProducts(){
 }
 
 public function add($data){
-    $data = [
+    // Prepare the data for insertion, including the image_path
+    $dataToInsert = [
         'name' => $data['name'],
-            'quantity'=>$data['quantity'],
-            'price' =>$data['price'],
-            'type'=>$data['type'],
-            'category_id'=>$data['category'],
+        'quantity' => $data['quantity'],
+        'price' => $data['price'],
+        'type' => $data['type'],
+        'category_id' => $data['category'],
+        'image_path' => $data['image_path'] // Add image_path to the data
     ];
-    $result = $this->db->insert('product', $data);
+
+    // Perform the insert query
+    $result = $this->db->insert('product', $dataToInsert);
+
+    // Return true if insertion is successful, otherwise false
     if ($result) {
         return true;
     } else {
         return false;
     }
 }
+
 
 public function getProductById($id) {
     $this->db->query("SELECT 

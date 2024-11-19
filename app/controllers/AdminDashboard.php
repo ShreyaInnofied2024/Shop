@@ -23,7 +23,6 @@ class AdminDashboard extends Controller
             'orderStatusCounts'=>$orderStatusCounts,
             'customer'=>$customer
         ];
-
         // Pass data to the view
         $this->view('admin/dashboard',$data);
     }
