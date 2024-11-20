@@ -18,118 +18,114 @@ class ProductController extends Controller{
         $this->view('product/index',$data);
     }
 
-
-    public function add(){
-        if(!isAdmin()){
+    public function add()
+    {
+        if (!isAdmin()) {
             redirect('productController/index');
         }
-
+    
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] == 0) {
-                // Get image details
-                $imageTmpPath = $_FILES['product_image']['tmp_name'];
-                $imageName = preg_replace('/[^a-zA-Z0-9.-_]/', '_', $_FILES['product_image']['name']); // Sanitize filename
-                $imageSize = $_FILES['product_image']['size'];
-                $imageType = $_FILES['product_image']['type'];
-
-               
-                // Set the target directory for image upload
-                $targetDirectory = "/shopMVC2/public/img/";
-                $targetFile = $targetDirectory . basename($imageName);
-
-               
-                
-                        
-        
-                // Validate the image file (optional)
-                if ($imageSize > 500000) { // Limit size to 500KB
-                    echo "Image size is too large.";
-                    exit;
-                }
-        
-                // Move the uploaded image to the server folder
-                if (move_uploaded_file($imageTmpPath, $targetFile)) {
-                    // Image path to save in the database
-                    $imagePath = $targetFile;
-        
-                    // Filter input data from the form
+            // Handle image upload
+            $target_dir = getcwd()."/img/";
+            $target_file = $target_dir . basename($_FILES["image"]["name"]);
+            $uploadOk = 1;
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    
+            // Check if the file is an image
+            $check = getimagesize($_FILES["image"]["tmp_name"]);
+            if ($check === false) {
+                flash('product_message', 'File is not an image.', 'alert alert-danger');
+                $uploadOk = 0;
+            }
+    
+            // Check file size (e.g., limit to 5MB)
+            if ($_FILES["image"]["size"] > 5000000) {
+                flash('product_message', 'Sorry, your file is too large.', 'alert alert-danger');
+                $uploadOk = 0;
+            }
+    
+            // Allow certain file formats
+            if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+                flash('product_message', 'Sorry, only JPG, JPEG, PNG & GIF files are allowed.', 'alert alert-danger');
+                $uploadOk = 0;
+            }
+    
+            if ($uploadOk == 1) {
+                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                    $imagePath = $target_file;
+    
+                    // Process product data
                     $_PRODUCT = filter_input_array(INPUT_POST);
                     $data = [
                         'name' => trim($_PRODUCT['name']),
                         'quantity' => trim($_PRODUCT['quantity']),
                         'price' => trim($_PRODUCT['price']),
                         'type' => trim($_PRODUCT['type']),
-                        'category' => trim($_PRODUCT['category_id']),
-                        'image_path' => $imagePath,  // Add image path here
+                        'category_id' => trim($_PRODUCT['category_id']),
+                        'image_path' => $imagePath,
                         'name_err' => '',
                         'quantity_err' => '',
                         'price_err' => '',
-                        'image_err'=>'',
                         'type_err' => '',
                         'category_err' => ''
                     ];
-        
-                    // Validate the form inputs
+    
+                    // Validate fields
                     if (empty($data['name'])) {
-                        $data['name_err'] = 'Please enter the name of the product';
+                        $data['name_err'] = 'Please enter the product name.';
                     }
                     if (empty($data['quantity'])) {
-                        $data['quantity_err'] = 'Please enter the quantity of the product';
+                        $data['quantity_err'] = 'Please enter the product quantity.';
                     }
                     if (empty($data['price'])) {
-                        $data['price_err'] = 'Please enter the price of the product';
+                        $data['price_err'] = 'Please enter the product price.';
                     }
                     if (empty($data['type'])) {
-                        $data['type_err'] = 'Please enter the type of the product';
+                        $data['type_err'] = 'Please enter the product type.';
                     }
-                    if (empty($data['category'])) {
-                        $data['category_err'] = 'Please select a category for the product';
+                    if (empty($data['category_id'])) {
+                        $data['category_err'] = 'Please select a category.';
                     }
-        
-                    // If no validation errors, insert the data into the database
+    
                     if (empty($data['name_err']) && empty($data['quantity_err']) && empty($data['price_err']) && empty($data['type_err']) && empty($data['category_err'])) {
-        
                         // Add product to the database
                         if ($this->product->add($data)) {
-                            // Update category quantity after product is added
-                            if ($this->category->updateCategoryQuantityOnAdd($data['category'], $data['quantity'])) {
-                                flash('product_message', "Product Added");
-                                redirect('productController');
-                            }
+                            flash('product_message', 'Product added successfully!');
+                            redirect('productController');
                         } else {
-                            die('Something went wrong');
+                            flash('product_message', 'Something went wrong.', 'alert alert-danger');
                         }
                     } else {
-                        // If validation failed, re-render the form with error messages
+                        // Load the form with validation errors
                         $this->view('product/add', $data);
                     }
                 } else {
-                    echo "Error uploading the image.";
+                    flash('product_message', 'Sorry, there was an error uploading your file.', 'alert alert-danger');
                 }
             } else {
-                echo "No image uploaded or there was an error.";
+                flash('product_message', 'Image upload failed.', 'alert alert-danger');
             }
         } else {
-            // If it's a GET request, show the form
-            $category = $this->category->getCategory();
+            // Load the form
+            $categories = $this->category->getCategory();
             $data = [
                 'name' => '',
                 'quantity' => '',
                 'price' => '',
                 'type' => '',
-                'category' => $category,
+                'category_id' => '',
+                'categories' => $categories,
+                'image_path' => '',
                 'name_err' => '',
                 'quantity_err' => '',
                 'price_err' => '',
-                'image_err'=>'',
                 'type_err' => '',
                 'category_err' => ''
             ];
             $this->view('product/add', $data);
         }
-    }        
-
-
+    }
+    
 
 public function show($id){
     $product=$this->product->getProductById($id);

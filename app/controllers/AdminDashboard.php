@@ -2,6 +2,7 @@
 class AdminDashboard extends Controller
 {
     private $report;
+    private $product;
 
     public function __construct()
     {
@@ -26,4 +27,6 @@ class AdminDashboard extends Controller
         // Pass data to the view
         $this->view('admin/dashboard',$data);
     }
+
+
 }

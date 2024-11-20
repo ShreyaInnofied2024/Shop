@@ -21,28 +21,43 @@ public function getProducts(){
     $results=$this->db->resultSet();
     return $results;
 }
+public function add($data)
+{
+    $this->db->query('INSERT INTO product (name, quantity, price, type, category_id, image_path) 
+                       VALUES (:name, :quantity, :price, :type, :category_id, :image_path)');
 
-public function add($data){
-    // Prepare the data for insertion, including the image_path
-    $dataToInsert = [
-        'name' => $data['name'],
-        'quantity' => $data['quantity'],
-        'price' => $data['price'],
-        'type' => $data['type'],
-        'category_id' => $data['category'],
-        'image_path' => $data['image_path'] // Add image_path to the data
-    ];
+    // Bind values
+    $this->db->bind(':name', $data['name']);
+    $this->db->bind(':quantity', $data['quantity']);
+    $this->db->bind(':price', $data['price']);
+    $this->db->bind(':type', $data['type']);
+    $this->db->bind(':category_id', $data['category_id']);
+    $this->db->bind(':image_path', $data['image_path']);
 
-    // Perform the insert query
-    $result = $this->db->insert('product', $dataToInsert);
-
-    // Return true if insertion is successful, otherwise false
-    if ($result) {
-        return true;
-    } else {
-        return false;
-    }
+    // Execute
+    return $this->db->execute();
 }
+
+// public function add($data){
+//     // Prepare the data for insertion, including the image_path
+//     $dataToInsert = [
+//         'name' => $data['name'],
+//         'quantity' => $data['quantity'],
+//         'price' => $data['price'],
+//         'type' => $data['type'],
+//         'category_id' => $data['category']// Add image_path to the data
+//     ];
+
+//     // Perform the insert query
+//     $result = $this->db->insert('product', $dataToInsert);
+
+//     // Return true if insertion is successful, otherwise false
+//     if ($result) {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
 
 
 public function getProductById($id) {
@@ -143,4 +158,15 @@ public function updateproductQuantityOnPayment($productId,$quantity){
         return false;
     }
 }
+
+public function addImage($data)
+{
+    $this->db->query("INSERT INTO product_images (image_path, product_id) VALUES (:image_path, :product_id)");
+    $this->db->bind(':image_path', $data['image_path']);
+    $this->db->bind(':product_id', $data['product_id']);
+    return $this->db->execute();
+}
+
+
+
 }
