@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="text-center mt-4">
-        <p>&copy; 2024 <a class="redirecthome" href="#">Cosmetic Store</a>. All rights reserved.</p>
+        <p>&copy; 2024 <a class="redirecthome text" href="#">Cosmetic Store</a>. All rights reserved.</p>
     </div>
 </footer>
 

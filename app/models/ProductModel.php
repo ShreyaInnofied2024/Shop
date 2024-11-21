@@ -21,22 +21,39 @@ public function getProducts(){
     $results=$this->db->resultSet();
     return $results;
 }
+
 public function add($data)
 {
-    $this->db->query('INSERT INTO product (name, quantity, price, type, category_id, image_path) 
-                       VALUES (:name, :quantity, :price, :type, :category_id, :image_path)');
-
-    // Bind values
+    $this->db->query("INSERT INTO product (name, quantity, price, type, category_id) VALUES (:name, :quantity, :price, :type, :category_id)");
     $this->db->bind(':name', $data['name']);
     $this->db->bind(':quantity', $data['quantity']);
     $this->db->bind(':price', $data['price']);
     $this->db->bind(':type', $data['type']);
     $this->db->bind(':category_id', $data['category_id']);
-    $this->db->bind(':image_path', $data['image_path']);
-
-    // Execute
-    return $this->db->execute();
+    
+    // Execute the query
+    if ($this->db->execute()) {
+        return $this->db->lastInsertId(); // Return the product ID
+    }
+    return false; // Return false if the query fails
 }
+
+// public function add($data)
+// {
+//     $this->db->query('INSERT INTO product (name, quantity, price, type, category_id) 
+//                        VALUES (:name, :quantity, :price, :type, :category_id)');
+
+//     // Bind values
+//     $this->db->bind(':name', $data['name']);
+//     $this->db->bind(':quantity', $data['quantity']);
+//     $this->db->bind(':price', $data['price']);
+//     $this->db->bind(':type', $data['type']);
+//     $this->db->bind(':category_id', $data['category_id']);
+//     // $this->db->bind(':image_path', $data['image_path']);
+
+//     // Execute
+//     return $this->db->execute();
+// }
 
 // public function add($data){
 //     // Prepare the data for insertion, including the image_path
@@ -62,22 +79,23 @@ public function add($data)
 
 public function getProductById($id) {
     $this->db->query("SELECT 
-                product.id, 
-                product.name, 
-                product.quantity, 
-                product.price, 
-                product.type,
-                product.category_id,
-                category.name AS category_name
-            FROM 
-                product
-            LEFT JOIN 
-                category ON category.id = product.category_id
-            WHERE 
-                product.id = :id");
-    $this->db->bind(':id', $id);
-    $row = $this->db->single();
-    return $row;
+    product.id AS id, 
+    product.name AS name, 
+    product.quantity AS quantity, 
+    product.price AS price, 
+    product.type AS type,
+    product.category_id, 
+    category.name AS category_name
+FROM 
+    product
+LEFT JOIN 
+    category ON category.id = product.category_id
+WHERE 
+    product.id = :id");
+$this->db->bind(':id', $id);
+$row = $this->db->single();
+return $row;
+
 }
 
     public function getProductsById($id) {
@@ -89,23 +107,58 @@ public function getProductById($id) {
 
 
 
-public function edit($data){
-    $data = [
-        'id'=>$data['id'],
-        'name'=>$data['name'],
-        'quantity'=>$data['quantity'],
-        'price' =>$data['price'],
-            'type'=>$data['type'],
-            'category_id'=>$data['category'],
-    ];
-    $where = 'id = :id';
-    $result = $this->db->update('product', $data, $where);
-    if ($result) {
-       return true;
-    } else {
-        return false;
-    }
+// public function edit($data){
+//     $data = [
+//         'id'=>$data['id'],
+//         'name'=>$data['name'],
+//         'quantity'=>$data['quantity'],
+//         'price' =>$data['price'],
+//             'type'=>$data['type'],
+//             'category_id'=>$data['category'],
+//     ];
+//     $where = 'id = :id';
+//     $result = $this->db->update('product', $data, $where);
+//     if ($result) {
+//        return true;
+//     } else {
+//         return false;
+//     }
+// }
+
+public function update($data)
+{
+    $this->db->query("UPDATE product SET name = :name, quantity = :quantity, price = :price, type = :type, category_id = :category_id WHERE id = :id");
+    $this->db->bind(':name', $data['name']);
+    $this->db->bind(':quantity', $data['quantity']);
+    $this->db->bind(':price', $data['price']);
+    $this->db->bind(':type', $data['type']);
+    $this->db->bind(':category_id', $data['category']);
+    $this->db->bind(':id', $data['id']);
+    return $this->db->execute();
 }
+
+public function getImagesByProductId($productId)
+{
+    $this->db->query("SELECT * FROM product_images WHERE product_id = :product_id");
+    $this->db->bind(':product_id', $productId);
+    return $this->db->resultSet();
+}
+
+public function getImageById($imageId)
+{
+    $this->db->query("SELECT * FROM product_images WHERE id = :id");
+    $this->db->bind(':id', $imageId);
+    return $this->db->single();
+}
+
+public function deleteImageById($imageId)
+{
+    $this->db->query("DELETE FROM product_images WHERE id = :id");
+    $this->db->bind(':id', $imageId);
+    return $this->db->execute();
+}
+
+
 
 
 
@@ -158,14 +211,69 @@ public function updateproductQuantityOnPayment($productId,$quantity){
         return false;
     }
 }
-
-public function addImage($data)
+public function addImage($productId, $imagePath)
 {
-    $this->db->query("INSERT INTO product_images (image_path, product_id) VALUES (:image_path, :product_id)");
-    $this->db->bind(':image_path', $data['image_path']);
-    $this->db->bind(':product_id', $data['product_id']);
+    $this->db->query("INSERT INTO product_images (product_id, image_path) VALUES (:product_id, :image_path)");
+    $this->db->bind(':product_id', $productId);
+    $this->db->bind(':image_path', $imagePath);
     return $this->db->execute();
 }
+
+public function getDigitalProductsWithImages() {
+    $sql = "
+        SELECT 
+            p.id, 
+            p.name, 
+            p.quantity, 
+            p.price, 
+            p.type, 
+            c.name AS category_name,
+            (SELECT pi.image_path 
+             FROM product_images pi 
+             WHERE pi.product_id = p.id 
+             LIMIT 1) AS image_path
+        FROM 
+            product p
+        JOIN 
+            category c ON p.category_id = c.id
+        WHERE 
+            p.type = 'Digital'
+    ";
+    $this->db->query($sql);
+    return $this->db->resultSet();
+}
+
+
+public function getPhysicalProductsWithImages() {
+    $sql = "
+        SELECT 
+            p.id, 
+            p.name, 
+            p.quantity, 
+            p.price, 
+            p.type, 
+            c.name AS category_name,
+            (SELECT pi.image_path 
+             FROM product_images pi 
+             WHERE pi.product_id = p.id 
+             LIMIT 1) AS image_path
+        FROM 
+            product p
+        JOIN 
+            category c ON p.category_id = c.id
+        WHERE 
+            p.type = 'Physical'
+    ";
+
+    $this->db->query($sql);
+    return $this->db->resultSet();
+}
+
+
+
+
+
+
 
 
 

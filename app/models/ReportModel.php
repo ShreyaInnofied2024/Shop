@@ -49,5 +49,42 @@ class ReportModel
     return $result->total_users; // Return the count
 }
 
+public function getDailyPurchases() {
+    $this->db->query("SELECT 
+    p.name AS product_name,
+    SUM(c.quantity) AS total_quantity_sold,
+    DATE(o.created_at) AS purchase_date
+FROM 
+    cart c
+JOIN 
+    product p ON c.product_id = p.id
+JOIN 
+    orders o ON c.user_id = o.user_id
+WHERE 
+    DATE(o.created_at) = CURDATE() -- Filter for today's purchases
+GROUP BY 
+    p.id, DATE(o.created_at)
+ORDER BY 
+    purchase_date DESC
+");
+
+    return $this->db->resultSet();
+}
+
+public function getPaymentMethods() {
+    $this->db->query("SELECT shipping_method AS payment_method, COUNT(*) AS method_count 
+                      FROM orders 
+                      GROUP BY shipping_method");
+    return $this->db->resultSet();
+}
+
+public function getRevenueGraph() {
+    $this->db->query("SELECT DATE(created_at) AS revenue_date, SUM(total_amount) AS daily_revenue 
+                      FROM orders 
+                      GROUP BY DATE(created_at)
+                      ORDER BY revenue_date ASC");
+    return $this->db->resultSet();
+}
+
     
 }

@@ -18,7 +18,7 @@
 <section id="login">
 <div class="login-container">
     <h2>Edit Product</h2>
-    <form action="<?php echo URLROOT; ?>/productController/edit/<?php echo $data['id'];?>" method="post">
+    <form action="<?php echo URLROOT; ?>/productController/edit/<?php echo $data['id'];?>" method="post" enctype="multipart/form-data">
         <div class="form-group">
         <label for="name" class="form-label">Name</label>
                            
@@ -44,6 +44,25 @@
                                    value="<?php echo $data['price']; ?>" placeholder="Enter price">
                             <span class="invalid-feedback"><?php echo $data['price_err']; ?></span>
                         </div>
+                        <div class="form-group">
+    <label>Existing Images</label>
+    <div class="existing-images">
+        <?php foreach ($data['existing_images'] as $image): ?>
+            <div class="image-container" style="display: inline-block; margin: 10px; text-align: center;">
+                <img src="<?php echo URLROOT . '/' . $image->image_path; ?>" alt="Product Image" style="width: 100px; height: auto;">
+                <br>
+                <a href="<?php echo URLROOT; ?>/productController/deleteImage/<?php echo $image->id; ?>" class="btn btn-danger btn-sm mt-2"
+                   onclick="return confirm('Are you sure you want to delete this image?');">Delete</a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="images">Add New Images</label>
+    <input type="file" name="images[]" multiple class="form-control">
+</div>
+                        
 
                         <div class="form-group">
                         <label for="type" class="form-label">Product Type</label>

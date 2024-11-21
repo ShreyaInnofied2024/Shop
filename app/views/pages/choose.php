@@ -9,6 +9,9 @@
     require_once APPROOT . '/controllers/AdminDashboard.php';
     $controller = new AdminDashboard();
     $controller->showDashboard();
+    $controller->dailyPurchases();
+    $controller->paymentMethods();
+    $controller->revenueGraph();
     ?>
     <?php endif; ?>
 <?php endif; ?>

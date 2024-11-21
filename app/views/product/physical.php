@@ -16,6 +16,7 @@
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Category</th>
+                    <th>Image</th> <!-- New column for images -->
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,13 @@
                         <td><?= htmlspecialchars($product->quantity); ?></td>
                         <td>$<?= number_format($product->price, 2); ?></td>
                         <td><?= htmlspecialchars($product->category_name); ?></td>
+                        <td>
+                            <?php if (!empty($product->image_path)): ?>
+                                <img src="<?= URLROOT . '/' . $product->image_path; ?>" alt="Product Image" style="width: 100px; height: auto;">
+                            <?php else: ?>
+                                <span>No image available</span>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -32,7 +40,4 @@
     </div>
 </div>
 
-
-
-
-
+<?php require APPROOT . '/views/inc/footer.php'; ?>

@@ -40,7 +40,7 @@
         
         <div>
         <label for="image" class="form-label">Product Image</label>
-        <input type="file" name="image" id="image"  class="form-control">
+        <input type="file" name="images[]" id="images" class="form-control" multiple>
         </div>
 
 

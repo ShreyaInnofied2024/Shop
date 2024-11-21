@@ -280,6 +280,12 @@ button,
 .btn-danger:hover {
     background-color: #b02a37;
 }
+.text{
+    text-decoration: none;
+    color: white;
+    margin-left: 5px;
+    font-weight: bold;
+}
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
