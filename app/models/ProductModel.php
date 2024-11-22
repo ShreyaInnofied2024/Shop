@@ -269,12 +269,46 @@ public function getPhysicalProductsWithImages() {
     return $this->db->resultSet();
 }
 
+public function getPaginatedProductsWithSingleImages($limit, $offset) {
+    $sql = "
+        SELECT 
+            p.id, 
+            p.name, 
+            p.quantity, 
+            p.price, 
+            p.type, 
+            c.name AS category_name,
+            (SELECT pi.image_path 
+             FROM product_images pi 
+             WHERE pi.product_id = p.id 
+             LIMIT 1) AS image_path
+        FROM 
+            product p
+        JOIN 
+            category c ON p.category_id = c.id
+        LIMIT :limit OFFSET :offset
+    ";
+    $this->db->query($sql);
+    $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+    $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+    return $this->db->resultSet();
+}
 
-
-
-
-
-
+public function getTotalProductsCount() {
+    $sql = "SELECT COUNT(*) AS count FROM product";
+    $this->db->query($sql);
+    return $this->db->single()->count;
+}
 
 
 }
+
+
+
+
+
+
+
+
+
+

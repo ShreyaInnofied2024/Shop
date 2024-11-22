@@ -113,7 +113,10 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center page-header mb-4">
         <h1 class="text-uppercase">View Product</h1>
-        <a href="<?= URLROOT; ?>/productController" class="btn btn-outline-secondary">Go Back</a>
+        <a href="<?= ($_SESSION['user_role'] === 'Admin') ? URLROOT . '/productController' : URLROOT ; ?>" 
+   class="btn btn-outline-secondary">
+   Go Back
+</a>
     </div>
 
     <!-- Flash Message -->
@@ -162,8 +165,10 @@
             <p><strong>Price:</strong> $<?= number_format($data['product']->price, 2); ?></p>
             <p><strong>Type:</strong> <?= ucfirst($data['product']->type); ?></p>
             <p><strong>Category:</strong> <?= $data['product']->category_name; ?></p>
-            <!-- Optional: Add a button to add to cart or similar functionality -->
-            <a href="#" class="btn">Add to Cart</a>
+            <?php if ($_SESSION['user_role'] === 'Customer'): ?>
+    <a href="<?php echo URLROOT ?>/cartController/add/<?php echo $data['product']->id ?>" class="btn">Add to Cart</a>
+<?php endif; ?>
+
         </div>
     </div>
 </div>

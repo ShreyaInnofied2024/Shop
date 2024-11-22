@@ -334,6 +334,34 @@ public function physical() {
     $this->view('product/physical', $data);
 }
 
+public function allProducts($page = 1) {
+    $productsPerPage = 4; 
+    $offset = ($page - 1) * $productsPerPage;
+
+    $products = $this->product->getPaginatedProductsWithSingleImages($productsPerPage, $offset);
+    $totalProducts = $this->product->getTotalProductsCount();
+    $totalPages = ceil($totalProducts / $productsPerPage);
+
+    $data = [
+        'products' => $products,
+        'totalPages' => $totalPages,
+        'currentPage' => $page
+    ];
+
+    if ($this->isAjax()) {
+        $this->view('product/product_partial', $data);
+    } else {
+        $this->view('product/customer_product', $data);
+    }
+}
+
+private function isAjax() {
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+}
+
+
+
+
 
    
     public function deleteImage($imageId)

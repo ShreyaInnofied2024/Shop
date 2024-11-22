@@ -49,40 +49,45 @@ class ReportModel
     return $result->total_users; // Return the count
 }
 
-public function getDailyPurchases() {
-    $this->db->query("SELECT 
-    p.name AS product_name,
-    SUM(c.quantity) AS total_quantity_sold,
-    DATE(o.created_at) AS purchase_date
-FROM 
-    cart c
-JOIN 
-    product p ON c.product_id = p.id
-JOIN 
-    orders o ON c.user_id = o.user_id
-WHERE 
-    DATE(o.created_at) = CURDATE() -- Filter for today's purchases
-GROUP BY 
-    p.id, DATE(o.created_at)
-ORDER BY 
-    purchase_date DESC
-");
+public function getRevenueByPaymentMethod() {
+    // SQL query to group revenue by payment method
+    $query = "
+        SELECT shipping_method, SUM(total_amount) AS total_revenue
+        FROM orders
+        GROUP BY shipping_method
+    ";
 
+    $this->db->query($query);
+    $this->db->execute();
     return $this->db->resultSet();
 }
 
-public function getPaymentMethods() {
-    $this->db->query("SELECT shipping_method AS payment_method, COUNT(*) AS method_count 
-                      FROM orders 
-                      GROUP BY shipping_method");
+public function getRevenueByDate() {
+    // SQL query to group revenue by date
+    $query = "
+        SELECT DATE(created_at) AS order_date, SUM(total_amount) AS total_revenue
+        FROM orders
+        GROUP BY DATE(created_at)
+        ORDER BY DATE(created_at) DESC
+    ";
+
+    $this->db->query($query);
+    $this->db->execute();
     return $this->db->resultSet();
 }
 
-public function getRevenueGraph() {
-    $this->db->query("SELECT DATE(created_at) AS revenue_date, SUM(total_amount) AS daily_revenue 
-                      FROM orders 
-                      GROUP BY DATE(created_at)
-                      ORDER BY revenue_date ASC");
+public function getRevenueByProduct() {
+    // SQL query to get total revenue for each product
+    $query = "
+        SELECT p.name AS product_name, SUM(oi.quantity * p.price) AS total_revenue
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        GROUP BY oi.product_id
+        ORDER BY total_revenue DESC
+    ";
+
+    $this->db->query($query);
+    $this->db->execute();
     return $this->db->resultSet();
 }
 

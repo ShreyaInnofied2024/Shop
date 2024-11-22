@@ -61,6 +61,70 @@
                 $this->db->bind(':order_id', $orderId);
                 return $this->db->execute();
             }
+
+            public function getUserOrders($user_id) {
+                $this->db->query("
+                    SELECT o.id, o.total_amount, o.status, o.created_at, o.shipping_method
+                    FROM orders o
+                    WHERE o.user_id = :user_id
+                    ORDER BY o.created_at DESC
+                ");
+                $this->db->bind(':user_id', $user_id);
+                return $this->db->resultSet(); // Fetch all matching rows
+            }
+          
+            public function getOrderById($order_id) {
+                $this->db->query("
+                    SELECT 
+                        o.id AS order_id,
+                        o.user_id,
+                        o.total_amount,
+                        o.status,
+                        o.shipping_method,
+                        o.created_at,
+                        o.updated_at
+                    FROM orders o
+                    WHERE o.id = :order_id
+                ");
+                $this->db->bind(':order_id', $order_id);
+                return $this->db->single();
+            }
+
+            public function getOrderItems($order_id) {
+                $this->db->query("
+                    SELECT p.name AS product_name, oi.quantity, oi.price, (oi.quantity * oi.price) AS total_price
+                    FROM order_items oi
+                    INNER JOIN product p ON oi.product_id = p.id
+                    WHERE oi.order_id = :order_id
+                ");
+                $this->db->bind(':order_id', $order_id);
+                return $this->db->resultSet(); // Fetch all items in the order
+            }
+            
+
+            public function saveOrderItems($orderId, $cartItems) {
+                foreach ($cartItems as $item) {
+                    $this->db->query("
+                        INSERT INTO order_items (order_id, product_id, quantity, price) 
+                        VALUES (:order_id, :product_id, :quantity, :price)
+                    ");
+                    $this->db->bind(':order_id', $orderId);
+                    $this->db->bind(':product_id', $item->product_id);
+                    $this->db->bind(':quantity', $item->cart_quantity);
+                    $this->db->bind(':price', $item->price);
+                    $this->db->execute();
+                }
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             
         }

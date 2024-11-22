@@ -45,26 +45,29 @@ class CartModel {
         return $this->db->execute();
     }
 
-    // Get all items in the user's cart
+
     public function getUserCart($user_id) {
-            $this->db->query("SELECT 
-                product.id AS product_id, 
-                product.name AS product_name, 
-                cart.quantity AS quantity, 
-                product.price AS price
+        $sql = "
+            SELECT 
+                c.product_id,
+                p.name AS product_name,
+                p.price,
+                c.quantity AS cart_quantity,
+                -- Get the first image path
+                (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id LIMIT 1) AS image_path
             FROM 
-                product
-            LEFT JOIN 
-                cart ON cart.product_id = product.id
-            LEFT JOIN 
-                user ON user.id = cart.user_id
+                cart c
+            JOIN 
+                product p ON c.product_id = p.id
             WHERE 
-                user.id = :user_id");
-        
-            $this->db->bind(':user_id', $user_id);
-            $results = $this->db->resultSet();
-            return $results;
-        }
+                c.user_id = :user_id
+        ";
+    
+        $this->db->query($sql);
+        $this->db->bind(':user_id', $user_id);
+        return $this->db->resultSet();
+    }
+    
         public function getTotalItems($user_id) {
             $this->db->query("SELECT SUM(quantity) AS total_items FROM cart WHERE user_id = :user_id");
             $this->db->bind(':user_id', $user_id);
@@ -87,6 +90,14 @@ class CartModel {
             $this->db->bind(':user_id', $userId);
             return $this->db->execute();
         }
+
+        public function assignOrderIdToCart($user_id, $order_id) {
+            $this->db->query("UPDATE cart SET order_id = :order_id WHERE user_id = :user_id AND order_id IS NULL");
+            $this->db->bind(':order_id', $order_id);
+            $this->db->bind(':user_id', $user_id);
+            return $this->db->execute(); // Update cart with order_id
+        }
+        
         
         
     }

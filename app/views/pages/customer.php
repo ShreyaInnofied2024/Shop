@@ -6,7 +6,7 @@
 </section>
 
 <!-- Featured Offers Section -->
- <section>
+ <section id= offer style=" margin-top: 20px">
 <div id="offers" class="container mb-5">
     <h2 class="text-center mb-4">Featured Offers</h2>
     <div class="row">
@@ -90,49 +90,3 @@
     </div>
 </div>
 
-<div id="product" class="container mb-5">
-    <h2 class="text-center mb-4">Shop Our Products</h2>
-    <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="card product">
-                <img src="/shopMVC2/public/img/sunscreen.png" class="card-img-top mx-auto img-fluid" alt="Sunscreen">
-                <div class="card-body">
-                    <h5 class="card-title">Sunscreen</h5>
-                    <p class="card-text">$19.99</p>
-                     <a href="#" class="btn btn-danger w-100">Add to Cart</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="card product">
-                <img src="/shopMVC2/public/img/Lipstick.png" class="card-img-top mx-auto img-fluid" alt="Lipstick">
-                <div class="card-body">
-                    <h5 class="card-title">Lipstick</h5>
-                    <p class="card-text">$9.99</p>
-                     <a href="#" class="btn btn-danger w-100">Add to Cart</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="card product">
-                <img src="/shopMVC2/public/img/perfume.png" class="card-img-top mx-auto img-fluid" alt="Perfume">
-                <div class="card-body">
-                    <h5 class="card-title">Perfume</h5>
-                    <p class="card-text">$29.99</p>
-                     <a href="#" class="btn btn-danger w-100">Add to Cart</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="card product">
-                <img src="/shopMVC2/public/img/cream.jpeg" class="card-img-top mx-auto img-fluid" alt="Face Cream">
-                <div class="card-body">
-                    <h5 class="card-title">Face Cream</h5>
-                    <p class="card-text">$15.99</p>
-                     <a href="#" class="btn btn-danger w-100">Add to Cart</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</section>

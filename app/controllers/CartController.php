@@ -53,9 +53,8 @@ class CartController extends Controller{
             ];
             $this->cart->addToCart($data);
         }
-    
-        // Redirect to the cart view
         redirect('cartController');
+
     }
     
   

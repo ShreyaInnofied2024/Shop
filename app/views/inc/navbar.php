@@ -27,6 +27,9 @@
                             <a class="nav-link" href="<?php echo URLROOT; ?>/cartController">Cart</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="<?php echo URLROOT; ?>/orderController/history">Order History</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="<?php echo URLROOT; ?>/userController/logout">Logout</a>
                         </li>
                     <?php elseif ($_SESSION['user_role'] == 'Admin') : ?>
