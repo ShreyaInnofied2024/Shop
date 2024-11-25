@@ -66,12 +66,13 @@
                 $this->db->query("
                     SELECT o.id, o.total_amount, o.status, o.created_at, o.shipping_method
                     FROM orders o
-                    WHERE o.user_id = :user_id
+                    WHERE o.user_id = :user_id AND o.status = 'Completed'
                     ORDER BY o.created_at DESC
                 ");
                 $this->db->bind(':user_id', $user_id);
                 return $this->db->resultSet(); // Fetch all matching rows
             }
+            
           
             public function getOrderById($order_id) {
                 $this->db->query("

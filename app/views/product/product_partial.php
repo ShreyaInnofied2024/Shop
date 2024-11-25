@@ -1,5 +1,10 @@
 <?php foreach ($data['products'] as $product): ?>
-    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4 product" 
+         data-category="<?= htmlspecialchars($product->category_id) ?>" 
+         data-name="<?= htmlspecialchars(strtolower($product->name)) ?>" 
+         data-price="<?= $product->price ?>" 
+         data-id="<?= $product->id ?>" 
+         data-image="<?= htmlspecialchars($product->image_path) ?>">
         <div class="card product">
             <img src="/shopMVC2/public/<?= htmlspecialchars($product->image_path) ?>" 
                  class="card-img-top mx-auto img-fluid" 

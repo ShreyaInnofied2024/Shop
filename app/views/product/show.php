@@ -52,7 +52,7 @@
 
 .carousel-inner img {
     border-radius: 10px;
-    max-height: 400px;
+    max-height: 700px;
     object-fit: cover;
 }
 

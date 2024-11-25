@@ -28,20 +28,21 @@ class AdminDashboard extends Controller
         $this->view('admin/dashboard',$data);
     }
 
-    public function getRevenueByPaymentMethod() {
-        $data = $this->report->getRevenueByPaymentMethod();
-        $this->view('admin/revenue_by_payment_method', ['data' => $data]);
-    }
+    public function dashboard() {
+        $revenueByDate = $this->report->getRevenueByDate();
+        $revenueByPaymentMethod = $this->report->getRevenueByPaymentMethod();
 
-    // Fetch and display revenue by date
-    public function getRevenueByDate() {
-        $data = $this->report->getRevenueByDate();
-        $this->view('admin/revenue_by_date', ['data' => $data]);
+        $data=[
+            'revenueByDate' => $revenueByDate,
+            'revenueByPaymentMethod' => $revenueByPaymentMethod
+        ];
+    
+        $this->view('admin/admin_dashboard', $data);
     }
-
-    // Fetch and display revenue by product
-    public function getRevenueByProduct() {
-        $data = $this->report->getRevenueByProduct();
-        $this->view('admin/revenue_by_product', ['data' => $data]);
+    
+    public function productsSoldByDate() {
+        $data = $this->report->getProductsSoldGroupedByDate(); // Fetch data from the model
+        $this->view('admin/products_sold_by_date', $data);   // Load the view with data
     }
+    
 }

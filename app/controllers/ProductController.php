@@ -341,11 +341,13 @@ public function allProducts($page = 1) {
     $products = $this->product->getPaginatedProductsWithSingleImages($productsPerPage, $offset);
     $totalProducts = $this->product->getTotalProductsCount();
     $totalPages = ceil($totalProducts / $productsPerPage);
+    $categories=$this->product->getAllCategories();
 
     $data = [
         'products' => $products,
         'totalPages' => $totalPages,
-        'currentPage' => $page
+        'currentPage' => $page,
+        'categories'=>$categories
     ];
 
     if ($this->isAjax()) {

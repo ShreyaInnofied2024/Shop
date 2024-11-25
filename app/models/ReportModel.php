@@ -76,20 +76,21 @@ public function getRevenueByDate() {
     return $this->db->resultSet();
 }
 
-public function getRevenueByProduct() {
-    // SQL query to get total revenue for each product
-    $query = "
-        SELECT p.name AS product_name, SUM(oi.quantity * p.price) AS total_revenue
+public function getProductsSoldGroupedByDate() {
+    $this->db->query("
+        SELECT 
+            DATE(o.created_at) AS sale_date,
+            p.name AS product_name,
+            SUM(oi.quantity) AS total_quantity,
+            SUM(oi.price * oi.quantity) AS total_revenue
         FROM order_items oi
-        JOIN products p ON oi.product_id = p.id
-        GROUP BY oi.product_id
-        ORDER BY total_revenue DESC
-    ";
-
-    $this->db->query($query);
-    $this->db->execute();
+        INNER JOIN product p ON oi.product_id = p.id
+        INNER JOIN orders o ON oi.order_id = o.id
+        WHERE o.status = 'completed' 
+        GROUP BY sale_date, product_name
+        ORDER BY sale_date DESC
+    ");
     return $this->db->resultSet();
 }
 
-    
 }

@@ -53,7 +53,7 @@ class CartController extends Controller{
             ];
             $this->cart->addToCart($data);
         }
-        redirect('cartController');
+        redirect(URLROOT);
 
     }
     

@@ -1,3 +1,19 @@
+<style>
+    /* Position the badge above the cart link */
+.badge-cart {
+    position: absolute;
+    top: -5px; /* Adjust this value to control how far above the link the badge hangs */
+    right: -10px; /* Adjust this value to control the horizontal positioning */
+    background-color: #343a40; /* Dark color */
+    color: white;
+}
+
+.position-relative{
+    margin-right: 10px;
+}
+</style>
+
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#"><?php echo SITENAME; ?></a>
@@ -23,9 +39,25 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo URLROOT; ?>/userController/changePassword/<?php echo $_SESSION['user_email']; ?>">Change Password</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo URLROOT; ?>/cartController">Cart</a>
-                        </li>
+
+
+                        <li class="nav-item position-relative">
+    <a class="nav-link" href="<?php echo URLROOT; ?>/cartController">
+        Cart
+        <?php
+        $cart = $this->model('CartModel'); 
+        $cartItemCount = $cart->getTotalItems($_SESSION['user_id']);
+        ?>
+        <span class="badge badge-pill badge-cart">
+            <?php echo ($cartItemCount > 0) ? $cartItemCount : '0'; ?>
+        </span>
+    </a>
+</li>
+
+
+
+
+
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo URLROOT; ?>/orderController/history">Order History</a>
                         </li>

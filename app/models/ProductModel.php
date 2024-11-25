@@ -276,7 +276,8 @@ public function getPaginatedProductsWithSingleImages($limit, $offset) {
             p.name, 
             p.quantity, 
             p.price, 
-            p.type, 
+            p.type,
+            p.category_id,
             c.name AS category_name,
             (SELECT pi.image_path 
              FROM product_images pi 
@@ -299,6 +300,15 @@ public function getTotalProductsCount() {
     $this->db->query($sql);
     return $this->db->single()->count;
 }
+
+public function getAllCategories() {
+    $query = "SELECT * FROM category";
+    $this->db->query($query);
+    $this->db->execute();
+
+    return $this->db->resultSet(); // Returns an array of category objects
+}
+
 
 
 }

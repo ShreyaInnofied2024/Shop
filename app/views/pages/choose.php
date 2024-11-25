@@ -14,11 +14,8 @@
     require_once APPROOT . '/controllers/AdminDashboard.php';
     $controller = new AdminDashboard();
     $controller->showDashboard();
-    // $controller->getRevenueByPaymentMethod();
-    
-    // $controller->getRevenueByDate();
-
-    // $controller->getRevenueByProduct();
+    $controller->dashboard();
+    $controller->productsSoldByDate();
     ?>
     <?php endif; ?>
 <?php endif; ?>
