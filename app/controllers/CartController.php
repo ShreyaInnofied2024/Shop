@@ -6,6 +6,12 @@ class CartController extends Controller{
     public function __construct() {
         $this->cart = $this->model('CartModel');
         $this->product=$this->model('ProductModel');
+        if(!isLoggedIn()){
+            redirect('userController/login');
+        }
+        if(isAdmin()){
+            redirect(URLROOT);
+        }
     }
 
     public function index(){
@@ -24,6 +30,12 @@ class CartController extends Controller{
     // Add to cart
 
     public function add($product_id) {
+        if (!isLoggedIn()) {
+            // Redirect to login with query parameters for redirect and product_id
+            redirect('userController/login?redirect=cart&product_id=' . $product_id);
+            return;
+        }
+    
         $user_id = $_SESSION['user_id'];
         $quantity = 1;
     
@@ -34,18 +46,14 @@ class CartController extends Controller{
         $cartItem = $this->cart->getCartItem($user_id, $product_id);
     
         if ($cartItem) {
-            // If the product is already in the cart, check if adding one more would exceed available quantity
             $newQuantity = $cartItem->quantity + 1;
-            
+    
             if ($newQuantity <= $product->quantity) {
-                // Update the quantity in the cart
                 $this->cart->updateQuantity($user_id, $product_id, $newQuantity);
             } else {
-                // Optional: Handle case where quantity exceeds available stock
                 echo "Cannot add more than available stock.";
             }
         } else {
-            // If the product is not in the cart, add it with quantity 1
             $data = [
                 'user_id' => $user_id,
                 'product_id' => $product_id,
@@ -53,9 +61,12 @@ class CartController extends Controller{
             ];
             $this->cart->addToCart($data);
         }
+    
+        // Redirect to the customer page after adding to the cart
         redirect(URLROOT);
-
     }
+    
+    
     
   
 

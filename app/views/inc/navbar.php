@@ -25,17 +25,16 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="<?php echo URLROOT; ?>">Home</a>
                 </li>
+
+                <?php if (!isAdmin()): ?>
+<li class="nav-item">
+    <a class="nav-link" href="#product">Shop</a>
+</li>
+<?php endif; ?>
+
+
                 <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) : ?>
                     <?php if ($_SESSION['user_role'] == 'Customer') : ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#product">Shop</a>
-                        </li>
-                        <!-- <li class="nav-item active">
-                            <a class="nav-link" href="#arrivals">New Arrivals</a>
-                        </li> -->
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="#offer">Offers</a>
-                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo URLROOT; ?>/userController/changePassword/<?php echo $_SESSION['user_email']; ?>">Change Password</a>
                         </li>

@@ -6,6 +6,9 @@ class CategoryController extends Controller{
         if(!isLoggedIn()){
             redirect('userController/login');
         }
+        if(!isAdmin()){
+            redirect(URLROOT);
+        }
         $this->category=$this->model('CategoryModel');
 
         $this->product=$this->model('ProductModel');

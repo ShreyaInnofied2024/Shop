@@ -3,14 +3,14 @@ class ProductController extends Controller{
     private $product;
     private $category;
     public function __construct(){
-        if(!isLoggedIn()){
-            redirect('users/login');
-        }
         $this->product=$this->model('ProductModel');
         $this->category=$this->model('CategoryModel');
     }
 
     public function index(){
+        if (!isAdmin()) {
+            redirect(URLROOT);
+        }
         $products=$this->product->getProducts();
         $data=[
             'products'=>$products
@@ -309,6 +309,9 @@ public function delete($id) {
 
 
 public function digital() {
+    if (!isAdmin()) {
+        redirect(URLROOT);
+    } 
     // Get digital products with one associated image
     $products = $this->product->getDigitalProductsWithImages();
     
@@ -322,6 +325,9 @@ public function digital() {
 }
 
 public function physical() {
+    if (!isAdmin()) {
+        redirect(URLROOT);
+    } 
     // Get digital products with one associated image
     $products = $this->product->getPhysicalProductsWithImages();
     
@@ -369,7 +375,7 @@ private function isAjax() {
     public function deleteImage($imageId)
     {
         if (!isAdmin()) {
-            redirect('productController/index');
+            redirect(URLROOT);
         }
     
         // Get the image details from the database

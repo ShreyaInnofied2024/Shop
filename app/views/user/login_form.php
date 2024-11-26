@@ -14,7 +14,9 @@
 <div class="login-container">
     <h2>Cosmetic Store</h2>
     <p>Please log in to continue shopping.</p>
-    <form action="<?php echo URLROOT; ?>/userController/login" method="post">
+    <form action="<?php echo URLROOT; ?>/userController/login<?php 
+    echo isset($data['redirect']) ? '?redirect=' . $data['redirect'] . '&product_id=' . $data['product_id'] : ''; 
+?>" method="post">
         <div class="form-group">
             <input type="email" class="form-control" name="email" placeholder="Email Address" required>
         </div>

@@ -7,6 +7,15 @@ class OrderController extends Controller{
     private $stripeServices;
 
     public function __construct() {
+
+        if(!isLoggedIn()){
+            redirect('userController/login');
+        }
+        if(isAdmin()){
+            redirect(URLROOT);
+        }
+
+
         $this->order = $this->model('OrderModel');
         $this->cart=$this->model('CartModel');
         $this->product=$this->model('ProductModel');

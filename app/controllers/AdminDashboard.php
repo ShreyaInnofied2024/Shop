@@ -7,6 +7,12 @@ class AdminDashboard extends Controller
     public function __construct()
     {
         $this->report = $this->model('ReportModel');
+        if(!isLoggedIn()){
+            redirect('userController/login');
+        }
+        if(!isAdmin()){
+            redirect(URLROOT);
+        }
     }
 
     public function showDashboard()

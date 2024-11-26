@@ -165,9 +165,10 @@
             <p><strong>Price:</strong> $<?= number_format($data['product']->price, 2); ?></p>
             <p><strong>Type:</strong> <?= ucfirst($data['product']->type); ?></p>
             <p><strong>Category:</strong> <?= $data['product']->category_name; ?></p>
-            <?php if ($_SESSION['user_role'] === 'Customer'): ?>
+            <?php if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] === 'Customer'): ?>
     <a href="<?php echo URLROOT ?>/cartController/add/<?php echo $data['product']->id ?>" class="btn">Add to Cart</a>
 <?php endif; ?>
+
 
         </div>
     </div>

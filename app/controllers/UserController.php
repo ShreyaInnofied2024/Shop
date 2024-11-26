@@ -59,57 +59,78 @@ class UserController extends Controller{
         }
     }
 
-    public function login(){
-        if($_SERVER['REQUEST_METHOD']=='POST'){
-                $_USER=filter_input_array(INPUT_POST);
-                $data=[
-                    'email'=>trim($_USER['email']),
-                    'password'=>trim($_USER['password']),
-                    'email_err'=>'',
-                    'password_err'=>''
-                ];
-                if(empty($data['email'])){
-                    $data['email_err'] = 'Please enter email';
-                }else{
-                    if($this->user->findUserByEmail($data['email'])){
-
-                    }else{
-                        $data['email_err']="No user found";
-                    }
-                }
-                  if(empty($data['password'])){
-                    $data['password_err'] = 'Please enter password';
-                  }
-
-                if(empty($data['email_err']) && empty($data['password_err'])){
-                    $loggedInUser=$this->user->login($data['email'],$data['password']);
-                    if($loggedInUser){
-                        $this->createUserSession($loggedInUser);
-                    }else{
-                        $data['password_err']='Password incorrect';
-                        $this->view('user/login',$data);
-                    }
-                }else{
-                    $this->view('user/login',$data);
-                }
-                }
-                else{
-            $data=[
-                'email' =>'',
-                'password' =>'',
-                'email_err'=>'',
-                'password_err' =>'',
+    public function login() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_USER = filter_input_array(INPUT_POST);
+            $data = [
+                'email' => trim($_USER['email']),
+                'password' => trim($_USER['password']),
+                'email_err' => '',
+                'password_err' => ''
             ];
-            $this->view('user/login',$data);
+    
+            // Validate email and password
+            if (empty($data['email'])) {
+                $data['email_err'] = 'Please enter email';
+            } else {
+                if (!$this->user->findUserByEmail($data['email'])) {
+                    $data['email_err'] = "No user found";
+                }
+            }
+    
+            if (empty($data['password'])) {
+                $data['password_err'] = 'Please enter password';
+            }
+    
+            if (empty($data['email_err']) && empty($data['password_err'])) {
+                $loggedInUser = $this->user->login($data['email'], $data['password']);
+                if ($loggedInUser) {
+                    // Pass query parameters to createUserSession
+                    $this->createUserSession($loggedInUser);
+                } else {
+                    $data['password_err'] = 'Password incorrect';
+                    $this->view('user/login', $data);
+                }
+            } else {
+                $this->view('user/login', $data);
+            }
+        } else {
+            $data = [
+                'email' => '',
+                'password' => '',
+                'email_err' => '',
+                'password_err' => '',
+            ];
+    
+            // Handle query parameters (if any)
+            if (isset($_GET['redirect'], $_GET['product_id'])) {
+                $data['redirect'] = $_GET['redirect'];
+                $data['product_id'] = $_GET['product_id'];
+            }
+    
+            $this->view('user/login', $data);
         }
     }
-    public function createUserSession($user){
-        $_SESSION['user_id']=$user->id;
-        $_SESSION['user_email']=$user->email;
-        $_SESSION['user_name']=$user->name;
-        $_SESSION['user_role']=$user->user_role;
-        redirect('pageController/choose');
+    
+
+    public function createUserSession($user) {
+        $_SESSION['user_id'] = $user->id;
+        $_SESSION['user_email'] = $user->email;
+        $_SESSION['user_name'] = $user->name;
+        $_SESSION['user_role'] = $user->user_role;
+    
+        // Check for redirect context
+        if (isset($_GET['redirect'], $_GET['product_id']) && $_GET['redirect'] == 'cart') {
+            // Redirect to add product to cart
+            redirect('cartController/add/' . $_GET['product_id']);
+        } else {
+            // Default redirect
+            redirect('pageController/choose');
+        }
     }
+    
+    
+    
 
     public function logout(){
         unset($_SESSION['user_id']);
