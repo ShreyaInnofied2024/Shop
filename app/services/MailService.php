@@ -21,7 +21,7 @@ class MailService {
             $mail->Port = 587;
 
             // Sender and recipient
-            $mail->setFrom('shreyasingh752002@gmail.com', 'Shreya Simgh');
+            $mail->setFrom('shreyasingh752002@gmail.com', 'Shreya Singh');
             $mail->addAddress($to);
 
             // Content

@@ -102,29 +102,103 @@ class OrderController extends Controller{
     
 
 
-public function success() {
-    if (isset($_SESSION['pending_order_id'])) {
-        $user_id=$_SESSION['user_id'];
-        $orderId = $_SESSION['pending_order_id'];
-        $this->order->updateOrderStatus($orderId, 'completed');
-        $products=$this->cart->getUserCart($user_id);
-        foreach ($products as $product) {
-            $product_id = $product->product_id;
-            $quantity = $product->quantity;
-            $this->product->updateproductQuantityOnPayment($product_id, $quantity);
+    public function success() {
+        if (isset($_SESSION['pending_order_id'])) {
+            $user_id = $_SESSION['user_id'];
+            $orderId = $_SESSION['pending_order_id'];
+    
+            // Update order status to completed
+            $this->order->updateOrderStatus($orderId, 'completed');
+    
+            // Get user's cart products and update product quantities
+            $products = $this->cart->getUserCart($user_id);
+            foreach ($products as $product) {
+                $product_id = $product->product_id;
+                $quantity = $product->quantity;
+                $this->product->updateproductQuantityOnPayment($product_id, $quantity);
+            }
+    
+            // Clear the cart
+            $this->cart->clearCart($user_id);
+    
+            // Send order confirmation email
+            $user_email = $_SESSION['user_email'];
+            $this->sendOrderConfirmationEmail($orderId, $user_email);
+    
+            // Load the success view
+            $data = [];
+            $this->view('paypal/success', $data);
+            exit();
         }
-        $this->cart->clearCart($user_id);
-
-        $mailService = new MailService();
-        $to = $_SESSION['user_email'];
-        $subject = 'Order Confirmation';
-        $body = 'Your order has been successfully placed !';
-        $mailService->sendEmail($to, $subject, $body);
-        $data=[];
-        $this->view('paypal/success',$data);
-        exit();
     }
+    
+
+public function sendOrderConfirmationEmail($order_id, $user_email) {
+    $username=$_SESSION['user_name'];
+    // Fetch order details
+    $order = $this->order->getOrderById($order_id);
+    
+    // Fetch order items
+    $orderItems = $this->order->getOrderItems($order_id);
+
+    // Generate email body
+    $body = '<h1 style="text-align: center; color: #333;">Order Confirmation</h1>';
+$body .= '<p style="font-size: 16px;">Dear <strong>' . htmlspecialchars($username) . ',</strong></p>';
+$body .= '<p style="font-size: 14px;">Thank you for your order! We are pleased to inform you that your payment of Rs. ' . htmlspecialchars($order->total_amount) . ' has been processed successfully.</p>';
+$body .= '<p style="font-size: 14px;">Here are the details of your order:</p>';
+
+$body .= '<h2 style="font-size: 18px; margin-top: 20px; color: #555;">Order Details:</h2>';
+$body .= '<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">';
+$body .= '<thead><tr>';
+$body .= '<th style="background-color: #f2f2f2; text-align: center;">Order ID</th>';
+$body .= '<th style="background-color: #f2f2f2; text-align: center;">Total Amount</th>';
+$body .= '<th style="background-color: #f2f2f2; text-align: center;">Status</th>';
+$body .= '<th style="background-color: #f2f2f2; text-align: center;">Payment Method</th>';
+$body .= '</tr></thead>';
+$body .= '<tbody><tr>';
+$body .= '<td style="text-align: center;">' . htmlspecialchars($order->order_id) . '</td>';
+$body .= '<td style="text-align: center;">Rs. ' . htmlspecialchars($order->total_amount) . '</td>';
+$body .= '<td style="text-align: center;">Completed</td>';
+$body .= '<td style="text-align: center;">' . htmlspecialchars($order->shipping_method) . '</td>';
+$body .= '</tr></tbody>';
+$body .= '</table>';
+
+$body .= '<h2 style="font-size: 18px; margin-top: 20px; color: #555;">Items in Your Order:</h2>';
+$body .= '<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">';
+$body .= '<thead><tr>';
+$body .= '<th style="background-color: #f2f2f2; text-align: center;">Product Name</th>';
+$body .= '<th style="background-color: #f2f2f2; text-align: center;">Price</th>';
+$body .= '<th style="background-color: #f2f2f2; text-align: center;">Quantity</th>';
+$body .= '</tr></thead>';
+$body .= '<tbody>';
+foreach ($orderItems as $item) {
+    $body .= '<tr>';
+    $body .= '<td style="text-align: center;">' . htmlspecialchars($item->product_name) . '</td>';
+    $body .= '<td style="text-align: center;">Rs. ' . htmlspecialchars($item->price) . '</td>';
+    $body .= '<td style="text-align: center;">'. htmlspecialchars($item->quantity) .'</td>';
+    $body .= '</tr>';
 }
+$body .= '</tbody>';
+$body .= '</table>';
+
+$body .= '<p style="font-size: 14px;">You will receive an email confirmation shortly with more details regarding the shipping of your order.</p>';
+$body .= '<p style="font-size: 14px;">If you have any questions or need further assistance, feel free to contact us at <a href="mailto:shreya@gmail.com">support@cosmeticstore.com</a>.</p>';
+$body .= '<p style="font-size: 14px;">Thank you for choosing Cosmetic Store!</p>';
+$body .= '<p style="font-size: 14px;">Best Regards,<br><strong>The Cosmetic Store Team</strong></p>';
+
+if ($order->shipping_method === 'PayPal') {
+    $body .= '<p style="margin-top: 20px;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" alt="PayPal Logo" style="display: block; margin: 0 auto;"></p>';
+} elseif ($order->shipping_method === 'Stripe') {
+    $body .= '<p style="margin-top: 20px;"><img src="https://media.designrush.com/inspiration_images/656402/conversions/3-desktop.jpg" alt="Stripe Logo" style="width: 100%; height: auto; object-fit: cover; display: block; margin: 0 auto;"></p>';
+}
+
+
+    // Use your MailService or email library to send the email
+    $mailService = new MailService(); // Adjust this to your actual email service
+    $subject = 'Order Confirmation - Order #' . $order->order_id;
+    $mailService->sendEmail($user_email, $subject, $body);
+}
+
 
 public function cancel() {
     if (isset($_SESSION['pending_order_id'])) {

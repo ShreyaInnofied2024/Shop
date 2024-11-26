@@ -105,26 +105,6 @@ return $row;
     }
 
 
-
-
-// public function edit($data){
-//     $data = [
-//         'id'=>$data['id'],
-//         'name'=>$data['name'],
-//         'quantity'=>$data['quantity'],
-//         'price' =>$data['price'],
-//             'type'=>$data['type'],
-//             'category_id'=>$data['category'],
-//     ];
-//     $where = 'id = :id';
-//     $result = $this->db->update('product', $data, $where);
-//     if ($result) {
-//        return true;
-//     } else {
-//         return false;
-//     }
-// }
-
 public function update($data)
 {
     $this->db->query("UPDATE product SET name = :name, quantity = :quantity, price = :price, type = :type, category_id = :category_id WHERE id = :id");
