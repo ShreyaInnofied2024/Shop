@@ -116,7 +116,7 @@ public function success() {
         $this->cart->clearCart($user_id);
 
         $mailService = new MailService();
-        $to = $user_id;
+        $to = $_SESSION['user_email'];
         $subject = 'Order Confirmation';
         $body = 'Your order has been successfully placed !';
         $mailService->sendEmail($to, $subject, $body);

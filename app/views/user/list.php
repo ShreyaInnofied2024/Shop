@@ -14,6 +14,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Action</th> <!-- Column for delete button -->
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,11 @@
                     <tr>
                         <td><?= htmlspecialchars($user->name); ?></td>
                         <td><?= htmlspecialchars($user->email); ?></td>
+                        <td>
+                            <!-- Delete button with confirmation -->
+                            <a href="<?= URLROOT; ?>/userController/deleteUser/<?= $user->id; ?>" class="btn btn-danger btn-sm">Delete</a>
+                                
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

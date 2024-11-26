@@ -107,6 +107,25 @@
 .flash-message.alert-danger {
     background-color: #e74c3c;
 }
+
+.carousel-inner {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        height: 550px;
+    }
+
+    .carousel-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .img-custom {
+        width: 100%; /* Ensures the image spans the full width of the container */
+        height: 100%; /* Fixed height for uniformity */
+        object-fit: cover; /* Maintains aspect ratio and covers the area without distortion */
+    }
 </style>
 
 <div class="container my-5">
@@ -130,22 +149,29 @@
     <div class="row">
         <!-- Product Images Carousel -->
         <div class="col-md-6">
-            <div id="productCarousel" class="carousel show slide" data-bs-ride="carousel">
-                <div class="carousel-inner show_inner">
-                    <?php if (count($data['images']) > 0): ?>
-                        <?php $active = 'active'; // Set first image as active ?>
-                        <?php foreach ($data['images'] as $image): ?>
-                            <div class="carousel-item <?= $active; ?>">
-                                <img src="<?= URLROOT . '/' . $image->image_path; ?>" class="d-block w-100" alt="Product Image">
-                            </div>
-                            <?php $active = ''; // After first item, make others inactive ?>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="carousel-item active">
-                            <img src="<?= URLROOT; ?>/img/default-image.jpg" class="d-block w-100" alt="No image available">
-                        </div>
-                    <?php endif; ?>
+    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <?php if (count($data['images']) > 0): ?>
+                <?php $active = 'active'; // Set the first image as active ?>
+                <?php foreach ($data['images'] as $image): ?>
+                    <div class="carousel-item <?= $active; ?>">
+                        <img src="<?= URLROOT . '/' . $image->image_path; ?>" 
+                             class="d-block w-100 img-fluid img-custom" 
+                             alt="Product Image">
+                    </div>
+                    <?php $active = ''; // After first item, make others inactive ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="carousel-item active">
+                    <img src="<?= URLROOT; ?>/img/default-image.jpg" 
+                         class="d-block w-100 img-fluid img-custom" 
+                         alt="No image available">
                 </div>
+            <?php endif; ?>
+        </div>
+
+
+
                 <!-- Carousel Controls -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

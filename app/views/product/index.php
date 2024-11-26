@@ -57,8 +57,5 @@
             <a href="<?= URLROOT; ?>/productController/digital" class="btn btn-outline-secondary">Digital</a>
             <a href="<?= URLROOT; ?>/productController/physical" class="btn btn-outline-secondary">Physical</a>
         </div>
-        <?php if(isAdmin()): ?>
-            <a href="<?= URLROOT; ?>/userController/list" class="btn btn-outline-dark">Get All Users</a>
-        <?php endif; ?>
     </div>
 </div>

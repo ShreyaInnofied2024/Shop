@@ -200,4 +200,24 @@ class UserController extends Controller{
             $this->view('user/change_password',$data);
         }
     }
+
+    // AdminController.php or the relevant controller
+public function deleteUser($id)
+{
+    // Check if the user is logged in and is an admin
+    if ($_SESSION['user_role'] !== 'Admin') {
+        header('Location: ' . URLROOT . '/userController');
+        exit();
+    }
+
+    // Call the model to delete the user
+    if ($this->user->deleteUserById($id)) {
+        // Redirect to the users list page with success message
+        redirect(URLROOT);
+    } else {
+        // Redirect with error message
+        redirect(URLROOT);
+    }
+}
+
 }

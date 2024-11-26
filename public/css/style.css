@@ -287,6 +287,23 @@ button,
     font-weight: bold;
 }
 
+#offers .offer-card {
+    height: 200px; /* Set a fixed height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the content vertically */
+    align-items: center; /* Center the content horizontally */
+}
+
+#offers .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+#offers .card-text {
+    font-size: 1rem;
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .navbar-brand {

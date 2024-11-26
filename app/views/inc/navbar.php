@@ -52,11 +52,6 @@
         </span>
     </a>
 </li>
-
-
-
-
-
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo URLROOT; ?>/orderController/history">Order History</a>
                         </li>
@@ -69,6 +64,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo URLROOT; ?>/categoryController">Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo URLROOT; ?>/userController/list">Users</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo URLROOT; ?>/userController/logout">Logout</a>

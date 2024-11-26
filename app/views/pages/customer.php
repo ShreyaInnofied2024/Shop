@@ -1,3 +1,24 @@
+<style>
+#offers .offer-card {
+    height: 150px; /* Set a fixed height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the content vertically */
+    align-items: center; /* Center the content horizontally */
+}
+
+#offers .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+#offers .card-text {
+    font-size: 1rem;
+}
+</style>
+
+
+
 <section>
 <div class="jumbotron text-center bg-light py-5">
     <h1>Welcome to Cosmetic Store</h1>
@@ -6,42 +27,44 @@
 </section>
 
 <!-- Featured Offers Section -->
- <section id= offer style=" margin-top: 20px">
-<div id="offers" class="container mb-5">
-    <h2 class="text-center mb-4">Featured Offers</h2>
-    <div class="row">
-        <!-- First Offer -->
-        <div class="col-md-4 mb-4">
-            <div class="card offer-card bg-light text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Buy One, Get One Free</h5>
-                    <p class="card-text">On selected lipsticks. Limited time offer!</p>
+<section id="offer" style="margin-top: 20px;">
+    <div id="offers" class="container mb-5">
+        <h2 class="text-center mb-4">Featured Offers</h2>
+        <div class="row">
+            <!-- First Offer -->
+            <div class="col-md-4 mb-4">
+                <div class="card offer-card bg-light text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Buy One, Get One Free</h5>
+                        <p class="card-text">On selected lipsticks. Limited time offer!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Offer -->
+            <div class="col-md-4 mb-4">
+                <div class="card offer-card bg-light text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">20% Off Skincare</h5>
+                        <p class="card-text">All skincare products for this month only.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Third Offer -->
+            <div class="col-md-4 mb-4">
+                <div class="card offer-card bg-light text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Free Shipping</h5>
+                        <p class="card-text">On selected items. Order above $50!</p>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Second Offer -->
-        <div class="col-md-4 mb-4">
-            <div class="card offer-card bg-light text-center">
-                <div class="card-body">
-                    <h5 class="card-title">20% Off Skincare</h5>
-                    <p class="card-text">All skincare products for this month only.</p>
-                     </div>
-            </div>
-        </div>
-        
-        <!-- Third Offer -->
-        <div class="col-md-4 mb-4">
-            <div class="card offer-card bg-light text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Free Shipping</h5>
-                    <p class="card-text"> On selected items. order above $50! </p>
-                     </div>
-            </div>
-        </div>
     </div>
-</div>
 </section>
+
+
 
 
 <!-- New Arrivals Carousel -->
