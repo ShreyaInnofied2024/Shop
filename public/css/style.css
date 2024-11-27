@@ -8,6 +8,7 @@
 body {
     background-color: #f9f2ec;
     font-family: 'Arial', sans-serif;
+    overflow-x: hidden;
 }
 
 h1, h2 {
@@ -49,7 +50,8 @@ h2 {
 .product-card img,
 .card-img-top {
     object-fit: cover;
-    height: 270px;
+    max-width: 100%;
+    height: auto;
 }
 
 .card {
@@ -303,6 +305,34 @@ button,
 #offers .card-text {
     font-size: 1rem;
 }
+
+/* Ensuring that all the cards have the same height */
+#product-list .product {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Make the card take up all available height */
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-body {
+    flex-grow: 1; /* Allow the body to take up the remaining space */
+}
+
+/* Optional: Add a fixed height for uniformity */
+.card {
+    height: 350px; /* Adjust this value as needed */
+}
+
+/* Optional: Add equal padding and margin */
+.product {
+    padding: 10px;
+}
+
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {

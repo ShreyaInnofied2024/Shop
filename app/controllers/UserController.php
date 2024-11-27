@@ -137,7 +137,7 @@ class UserController extends Controller{
         unset($_SESSION['user_email']);
         unset($_SESSION['user_name']);
         session_destroy();
-        redirect('userController/login');
+        redirect(URLROOT);
     }
 
     public function list(){

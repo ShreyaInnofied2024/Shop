@@ -17,7 +17,9 @@ public function getProducts(){
             FROM 
                 product
             LEFT JOIN 
-                category ON  category.id=product.category_id");
+                category ON  category.id=product.category_id
+            WHERE
+                 product.is_deleted = False");
     $results=$this->db->resultSet();
     return $results;
 }
@@ -38,43 +40,6 @@ public function add($data)
     return false; // Return false if the query fails
 }
 
-// public function add($data)
-// {
-//     $this->db->query('INSERT INTO product (name, quantity, price, type, category_id) 
-//                        VALUES (:name, :quantity, :price, :type, :category_id)');
-
-//     // Bind values
-//     $this->db->bind(':name', $data['name']);
-//     $this->db->bind(':quantity', $data['quantity']);
-//     $this->db->bind(':price', $data['price']);
-//     $this->db->bind(':type', $data['type']);
-//     $this->db->bind(':category_id', $data['category_id']);
-//     // $this->db->bind(':image_path', $data['image_path']);
-
-//     // Execute
-//     return $this->db->execute();
-// }
-
-// public function add($data){
-//     // Prepare the data for insertion, including the image_path
-//     $dataToInsert = [
-//         'name' => $data['name'],
-//         'quantity' => $data['quantity'],
-//         'price' => $data['price'],
-//         'type' => $data['type'],
-//         'category_id' => $data['category']// Add image_path to the data
-//     ];
-
-//     // Perform the insert query
-//     $result = $this->db->insert('product', $dataToInsert);
-
-//     // Return true if insertion is successful, otherwise false
-//     if ($result) {
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
 
 
 public function getProductById($id) {
@@ -144,8 +109,10 @@ public function deleteImageById($imageId)
 
 
 public function delete($id){
-    $conditions = ['id' => $id];
-    $result=$this->db->delete('product', $conditions);
+
+    $this->db->query("UPDATE product SET is_deleted = TRUE WHERE id = :id");
+    $this->db->bind(':id', $id);
+    return $this->db->execute();
     if ($result) {
         return true;
     } else {
@@ -261,12 +228,14 @@ public function getPaginatedProductsWithSingleImages($limit, $offset) {
             c.name AS category_name,
             (SELECT pi.image_path 
              FROM product_images pi 
-             WHERE pi.product_id = p.id 
+             WHERE pi.product_id = p.id
              LIMIT 1) AS image_path
         FROM 
             product p
         JOIN 
             category c ON p.category_id = c.id
+            WHERE
+    p.is_deleted = False
         LIMIT :limit OFFSET :offset
     ";
     $this->db->query($sql);

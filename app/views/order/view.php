@@ -17,32 +17,26 @@
         <h1 class="text-center mb-4 ">Your Orders</h1>
 
         <?php if (!empty($data['cartItems'])): ?>
-            <div class="table-responsive mb-4">
-                <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($data['cartItems'] as $item): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($item->product_name); ?></td>
-                                <td><?php echo htmlspecialchars($item->cart_quantity); ?></td>
-                                <td><?php echo "$" . number_format($item->price, 2); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+            <div class="row">
+                <?php foreach ($data['cartItems'] as $item): ?>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card">
+                            <img src="/shopMVC2/public/<?= htmlspecialchars($item->image_path) ?>" 
+                                 class="card-img-top" 
+                                 alt="<?= htmlspecialchars($item->product_name) ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($item->product_name) ?></h5>
+                                <p class="card-text">Price: $<?= number_format($item->price, 2) ?></p>
+                                <p class="card-text">Quantity: <?= htmlspecialchars($item->cart_quantity) ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
 
-            <div class="row mb-4">
-                <div class="col-6">
-                    <p><strong>Total Items:<?php echo htmlspecialchars($data['totalItems']); ?></strong></p>
-                    <p><strong>Total Price: $<?php echo number_format($data['totalPrice'], 2); ?></strong></p>
-                </div>
+            <div class="d-flex justify-content-between">
+                <p><strong>Total Items: <?= htmlspecialchars($data['totalItems']); ?></strong></p>
+                <p><strong> Price: $<?= number_format($data['totalPrice'], 2); ?></strong></p>
             </div>
 
             <!-- Card for Address and Payment Form -->

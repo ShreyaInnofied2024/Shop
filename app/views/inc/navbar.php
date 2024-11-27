@@ -2,8 +2,8 @@
     /* Position the badge above the cart link */
 .badge-cart {
     position: absolute;
-    top: -5px; /* Adjust this value to control how far above the link the badge hangs */
-    right: -10px; /* Adjust this value to control the horizontal positioning */
+    top: -5px; 
+    right: -10px; 
     background-color: #343a40; /* Dark color */
     color: white;
 }

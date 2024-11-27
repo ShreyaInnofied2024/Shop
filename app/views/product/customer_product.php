@@ -49,9 +49,6 @@
 
 
 
-    
-</div>
-
 
 <div id="product-list" class="row">
     <?php foreach ($data['products'] as $product): ?>

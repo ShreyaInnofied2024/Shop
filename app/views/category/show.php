@@ -16,6 +16,7 @@
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Type</th>
+                    <th>Image</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,13 @@
                         <td><?= htmlspecialchars($category->product_quantity); ?></td>
                         <td>$<?= number_format($category->product_price, 2); ?></td>
                         <td><?= htmlspecialchars($category->product_type); ?></td>
+                        <td>
+                            <?php if (!empty($category->product_image)): ?>
+                                <img src="<?= URLROOT . '/' . $category->product_image; ?>" alt="Product Image" style="width: 100px; height: auto;">
+                            <?php else: ?>
+                                <span>No image available</span>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

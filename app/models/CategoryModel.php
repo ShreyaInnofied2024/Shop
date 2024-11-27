@@ -80,17 +80,24 @@ public function getCategoryById($id) {
                 product.name AS product_name,
                 product.quantity AS product_quantity,
                 product.price AS product_price,
-                product.type AS product_type
+                product.type AS product_type,
+                (SELECT image_path 
+                 FROM product_images
+                 WHERE product_images.product_id = product.id 
+                 LIMIT 1) AS product_image
             FROM 
                 category
             LEFT JOIN 
                 product ON category.id = product.category_id
             WHERE 
-                category.id = :id");
+                category.id = :id
+            AND 
+                product.is_deleted=False");
     $this->db->bind(':id', $id);
     $results = $this->db->resultSet();
     return $results;
 }
+
 
 
 }

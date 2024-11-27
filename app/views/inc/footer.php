@@ -24,7 +24,7 @@
             <!-- Contact Form Section -->
             <div class="col-md-4 mb-4">
                 <h4>Contact Us</h4>
-                <form id="contact-form" method="post" onsubmit="return validateForm()">
+                <form id="contact-form" action="<?php echo URLROOT; ?>/pageController/submit" method="post" onsubmit="return validateForm()">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" name="name" >
