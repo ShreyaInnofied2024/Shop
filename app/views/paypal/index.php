@@ -52,7 +52,7 @@
             <h3>Checkout</h3>
         </div>
         <div class="card-body">
-            <h5 class="text-center mb-4">Total Amount: $<span id="total-price"></span></h5>
+            <h5 class="text-center mb-4">Total Amount: Rs <span id="total-price"></span></h5>
 
             <div id="paypal-button-container" class="paypal-button"></div>
 

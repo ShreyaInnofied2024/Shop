@@ -26,9 +26,10 @@
                                  alt="<?= htmlspecialchars($item->product_name) ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($item->product_name) ?></h5>
-                                <p class="card-text">Price: $<?= number_format($item->price, 2) ?></p>
-                                <p class="card-text">Quantity: <?= htmlspecialchars($item->cart_quantity) ?></p>
-                            </div>
+                             </div>
+                             <p class="card-text text-center">Price: Rs <?= number_format($item->price, 2) ?></p>
+                            <p class="card-text text-center">Quantity: <?= htmlspecialchars($item->cart_quantity) ?></p>
+
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -36,7 +37,7 @@
 
             <div class="d-flex justify-content-between">
                 <p><strong>Total Items: <?= htmlspecialchars($data['totalItems']); ?></strong></p>
-                <p><strong> Price: $<?= number_format($data['totalPrice'], 2); ?></strong></p>
+                <p><strong> Price: Rs <?= number_format($data['totalPrice'], 2); ?></strong></p>
             </div>
 
             <!-- Card for Address and Payment Form -->

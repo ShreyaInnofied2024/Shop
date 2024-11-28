@@ -245,7 +245,7 @@ public function getPaginatedProductsWithSingleImages($limit, $offset) {
 }
 
 public function getTotalProductsCount() {
-    $sql = "SELECT COUNT(*) AS count FROM product";
+    $sql = "SELECT COUNT(*) AS count FROM product WHERE is_deleted=FALSE";
     $this->db->query($sql);
     return $this->db->single()->count;
 }

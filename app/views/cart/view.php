@@ -22,15 +22,17 @@
                                  alt="<?= htmlspecialchars($item->product_name) ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($item->product_name) ?></h5>
-                                <p class="card-text">Price: $<?= number_format($item->price, 2) ?></p>
-                                <p class="card-text">Quantity: <?= htmlspecialchars($item->cart_quantity) ?></p>
+                                
+                               
+                            </div>
+                            <p class="card-text text-center">Price: Rs <?= number_format($item->price, 2) ?></p>
+                            <p class="card-text text-center">Quantity: <?= htmlspecialchars($item->cart_quantity) ?></p>
 
-                                <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between">
                                     <a href="<?= URLROOT . "/cartController/increase/" . $item->product_id; ?>" class="btn btn-outline-primary" style="margin-right: 5px;">+</a>
                                     <a href="<?= URLROOT . "/cartController/decrease/" . $item->product_id; ?>" class="btn btn-outline-warning"  style="margin-right: 5px;">-</a>
                                     <a href="<?= URLROOT . "/cartController/remove/" . $item->product_id; ?>" class="btn btn-outline-danger">Remove</a>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -38,7 +40,7 @@
 
             <div class="d-flex justify-content-between">
                 <p><strong>Total Items: <?= htmlspecialchars($data['totalItems']); ?></strong></p>
-                <p><strong> Price: $<?= number_format($data['totalPrice'], 2); ?></strong></p>
+                <p><strong> Price: Rs <?= number_format($data['totalPrice'], 2); ?></strong></p>
             </div>
 
             <!-- Buttons for navigation -->

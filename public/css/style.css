@@ -37,9 +37,7 @@ h2 {
 
 /* Jumbotron Styling */
 .jumbotron {
-    background-image: url('/shopMVC2/public/img/cosmetics-banner.jpg');
-    background-size: cover;
-    background-position: center;
+    background: url('/shopMVC2/public/img/cosmetics-banner.jpg') center/cover;
     height: 250px;
     display: grid;
     place-items: center;
@@ -47,18 +45,14 @@ h2 {
 }
 
 /* Product Card Styling */
-.product-card img,
-.card-img-top {
-    object-fit: cover;
-    max-width: 100%;
-    height: auto;
-}
-
 .card {
     border: 1px solid #ddd;
     border-radius: 8px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
@@ -67,6 +61,7 @@ h2 {
 }
 
 .card-body {
+    flex-grow: 1;
     text-align: center;
 }
 
@@ -78,6 +73,13 @@ h2 {
     font-size: 2rem;
 }
 
+.product-card img,
+.card-img-top {
+    object-fit: cover;
+    max-width: 100%;
+    height: auto;
+}
+
 /* Footer Styling */
 footer {
     background-color: #343a40;
@@ -87,7 +89,7 @@ footer {
 footer h4 {
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: white;
+    color: #fff;
 }
 
 footer p {
@@ -96,7 +98,7 @@ footer p {
 }
 
 footer ul {
-    padding-left: 0;
+    list-style: none;
 }
 
 footer ul li {
@@ -115,16 +117,11 @@ footer button {
     color: #343a40;
     border: none;
     margin-top: 10px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
 }
 
 footer button:hover {
     background-color: #e2e6ea;
-}
-
-footer .text-center {
-    padding-bottom: 10px;
-    font-size: 0.875rem;
 }
 
 /* Carousel Styling */
@@ -132,7 +129,6 @@ footer .text-center {
     object-fit: contain;
     height: 500px;
     max-width: 100%;
-    display: block;
     margin: 0 auto;
 }
 
@@ -173,7 +169,7 @@ footer .text-center {
 
 .login-container,
 .register-container {
-    background-color: #ffffff;
+    background-color: #fff;
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -204,7 +200,7 @@ footer .text-center {
     color: #fff;
     font-size: 16px;
     margin-top: 20px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
 }
 
 .login-btn:hover,
@@ -252,7 +248,7 @@ button,
     font-size: 1rem;
     border-radius: 20px;
     padding: 10px 20px;
-    transition: 0.3s ease;
+    transition: 0.3s;
 }
 
 .btn-success {
@@ -282,19 +278,14 @@ button,
 .btn-danger:hover {
     background-color: #b02a37;
 }
-.text{
-    text-decoration: none;
-    color: white;
-    margin-left: 5px;
-    font-weight: bold;
-}
 
+/* Offers Section */
 #offers .offer-card {
-    height: 200px; /* Set a fixed height */
+    height: 200px;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center the content vertically */
-    align-items: center; /* Center the content horizontally */
+    justify-content: center;
+    align-items: center;
 }
 
 #offers .card-title {
@@ -306,33 +297,30 @@ button,
     font-size: 1rem;
 }
 
-/* Ensuring that all the cards have the same height */
-#product-list .product {
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Make the card take up all available height */
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.card-body {
-    flex-grow: 1; /* Allow the body to take up the remaining space */
-}
-
-/* Optional: Add a fixed height for uniformity */
-.card {
-    height: 350px; /* Adjust this value as needed */
-}
-
-/* Optional: Add equal padding and margin */
+/* Product List */
 .product {
-    padding: 10px;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
+.product .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.product .card-text {
+    font-size: 1rem;
+}
+
+.text{
+    color: white;
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    margin-left: 5px;
+}
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {

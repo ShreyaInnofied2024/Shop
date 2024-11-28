@@ -30,10 +30,10 @@ class ProductController extends Controller{
         // Process product data
         $data = [
             'name' => trim($_PRODUCT['name']),
-            'quantity' => trim($_PRODUCT['quantity']),
+            'quantity' => (int) trim($_PRODUCT['quantity']),
             'price' => trim($_PRODUCT['price']),
             'type' => trim($_PRODUCT['type']),
-            'category_id' => trim($_PRODUCT['category_id']),
+            'category_id' => (int) trim($_PRODUCT['category_id']),
             'name_err' => '',
             'quantity_err' => '',
             'price_err' => '',
@@ -63,47 +63,55 @@ class ProductController extends Controller{
             // Add product to the database
             $productId = $this->product->add($data);
             if ($productId) {
-                $target_dir = getcwd() . "/img/";
-                $uploadedFiles = $_FILES['images']; // Assuming multiple files are uploaded under "images"
-                $fileCount = count($uploadedFiles['name']);
+                // Update category quantity
+                if ($this->category->updateCategoryQuantityOnAdd($data['category_id'], $data['quantity'])) {
+                    // Handle image upload (same as before)
+                    $target_dir = getcwd() . "/img/";
+                    $uploadedFiles = $_FILES['images']; // Assuming multiple files are uploaded under "images"
+                    $fileCount = count($uploadedFiles['name']);
 
-                for ($i = 0; $i < $fileCount; $i++) {
-                    $imageFileType = strtolower(pathinfo($uploadedFiles['name'][$i], PATHINFO_EXTENSION));
-                    $uniqueImageName = $productId . "_image" . ($i + 1) . "." . $imageFileType; // Use product ID with an index for uniqueness
-                    $target_file = $target_dir . $uniqueImageName;
+                    for ($i = 0; $i < $fileCount; $i++) {
+                        $imageFileType = strtolower(pathinfo($uploadedFiles['name'][$i], PATHINFO_EXTENSION));
+                        $uniqueImageName = $productId . "_image" . ($i + 1) . "." . $imageFileType; // Use product ID with an index for uniqueness
+                        $target_file = $target_dir . $uniqueImageName;
 
-                    $uploadOk = 1;
-                    $check = getimagesize($uploadedFiles['tmp_name'][$i]);
-                    if ($check === false) {
-                        flash('product_message', 'File ' . $uploadedFiles['name'][$i] . ' is not an image.', 'alert alert-danger');
-                        $uploadOk = 0;
-                        continue;
-                    }
+                        $uploadOk = 1;
+                        $check = getimagesize($uploadedFiles['tmp_name'][$i]);
+                        if ($check === false) {
+                            flash('product_message', 'File ' . $uploadedFiles['name'][$i] . ' is not an image.', 'alert alert-danger');
+                            $uploadOk = 0;
+                            continue;
+                        }
 
-                    if ($uploadedFiles['size'][$i] > 5000000) {
-                        flash('product_message', 'File ' . $uploadedFiles['name'][$i] . ' is too large.', 'alert alert-danger');
-                        $uploadOk = 0;
-                        continue;
-                    }
+                        if ($uploadedFiles['size'][$i] > 5000000) {
+                            flash('product_message', 'File ' . $uploadedFiles['name'][$i] . ' is too large.', 'alert alert-danger');
+                            $uploadOk = 0;
+                            continue;
+                        }
 
-                    if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
-                        flash('product_message', 'File ' . $uploadedFiles['name'][$i] . ' has an invalid format.', 'alert alert-danger');
-                        $uploadOk = 0;
-                        continue;
-                    }
+                        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+                            flash('product_message', 'File ' . $uploadedFiles['name'][$i] . ' has an invalid format.', 'alert alert-danger');
+                            $uploadOk = 0;
+                            continue;
+                        }
 
-                    if ($uploadOk == 1) {
-                        if (move_uploaded_file($uploadedFiles['tmp_name'][$i], $target_file)) {
-                            $imagePath = "img/" . $uniqueImageName;
-                            $this->product->addImage($productId, $imagePath); // Add the image path to the database
-                        } else {
-                            flash('product_message', 'Error uploading file ' . $uploadedFiles['name'][$i], 'alert alert-danger');
+                        if ($uploadOk == 1) {
+                            if (move_uploaded_file($uploadedFiles['tmp_name'][$i], $target_file)) {
+                                $imagePath = "img/" . $uniqueImageName;
+                                $this->product->addImage($productId, $imagePath); // Add the image path to the database
+                            } else {
+                                flash('product_message', 'Error uploading file ' . $uploadedFiles['name'][$i], 'alert alert-danger');
+                            }
                         }
                     }
-                }
 
-                flash('product_message', 'Product and images added successfully!');
-                redirect('productController');
+                    flash('product_message', 'Product and images added successfully!');
+                    redirect('productController');
+                } else {
+                    // Rollback product addition or log error if category update fails
+                    $this->product->delete($productId); // Rollback the product addition
+                    flash('product_message', 'Failed to update category quantity. Product addition rolled back.', 'alert alert-danger');
+                }
             } else {
                 flash('product_message', 'Something went wrong while adding the product.', 'alert alert-danger');
             }

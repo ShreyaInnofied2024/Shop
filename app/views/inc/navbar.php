@@ -44,11 +44,11 @@
     <a class="nav-link" href="<?php echo URLROOT; ?>/cartController">
         Cart
         <?php
-        $cart = $this->model('CartModel'); 
-        $cartItemCount = $cart->getTotalItems($_SESSION['user_id']);
-        ?>
+                                $cart = $this->model('CartModel') ;// Instantiate model
+                                $cartItemCount = $cart->getActiveProductCount($_SESSION['user_id']); // Get active product count
+                                ?>
         <span class="badge badge-pill badge-cart">
-            <?php echo ($cartItemCount > 0) ? $cartItemCount : '0'; ?>
+            <?php echo $cartItemCount ?>
         </span>
     </a>
 </li>

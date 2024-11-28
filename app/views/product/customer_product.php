@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+   
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,6 @@
    <script src="index.js"></script>
    <script src="https://kit.fontawesome.com/155c5ab2ca.js" crossorigin="anonymous"></script>
    <script src="<?php echo URLROOT ?>/public/js/pagination.js"></script>
-  
 </head>
 <body>
 <div id="product" class="container mb-5">
@@ -62,14 +62,20 @@
                  alt="<?= htmlspecialchars($product->name) ?>">
             <div class="card-body">
                 <h5 class="card-title"><?= htmlspecialchars($product->name) ?></h5>
-                <p class="card-text">$<?= number_format($product->price, 2) ?></p>
-                <a href="<?= URLROOT ?>/productController/show/<?= $product->id ?>" class="btn btn-danger w-100">View</a>
-                <a href="<?= URLROOT ?>/cartController/add/<?= $product->id ?>" class="btn btn-primary w-100 mt-2">Add to Cart</a>
-            </div>
+               </div>
+
+              <p class="card-text">Rs <?= number_format($product->price, 2) ?></p>
+            <a href="<?= URLROOT ?>/productController/show/<?= $product->id ?>" class="btn btn-danger w-100">View</a>
+            <a href="<?= URLROOT ?>/cartController/add/<?= $product->id ?>" class="btn btn-primary w-100 mt-2">Add to Cart</a>
+           
         </div>
     </div>
     <?php endforeach; ?>
 </div>
+
+
+
+
 
 
    
@@ -121,7 +127,7 @@ function displayProducts(filteredProducts) {
 
     filteredProducts.forEach(product => {
         const productDiv = document.createElement('div');
-        productDiv.classList.add('col-lg-3', 'col-md-4', 'col-sm-6', 'mb-4', 'product');
+        productDiv.classList.add('col-lg-3', 'col-md-4', 'col-sm-6', 'mb-4', 'product','card');
 
         productDiv.innerHTML = `
             <div class="card product">
@@ -153,6 +159,10 @@ function clearFilters() {
 
 
 </script>
+
+
+
+<script>
 
 
 
