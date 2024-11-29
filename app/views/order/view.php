@@ -9,91 +9,473 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/shopMVC2/public/css/style.css">
 </head>
+<style>
+    /* Custom styles for static price summary and accordion */
+    .static-summary {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .accordion-button:focus {
+        box-shadow: none;
+    }
+
+    .cart-summary {
+        margin-top: 20px;
+    }
+
+    .custom-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 30px;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0, 128, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #28a745;
+        transform: translateY(-2px);
+    }
+
+    .custom-btn:disabled {
+        background-color: #d6d6d6;
+        cursor: not-allowed;
+    }
+    body {
+        background-color: #f5f5f5;
+        font-family: Arial, sans-serif;
+    }
+
+    .cart-item {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .cart-item img {
+        width: 150px;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .cart-item-details {
+        flex-grow: 1;
+        margin-left: 20px;
+    }
+
+    .cart-item-details h5 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .cart-item-details p {
+        margin: 0;
+    }
+
+    .cart-item-details .text-success {
+        font-weight: bold;
+    }
+
+    .cart-item-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .cart-item-actions .quantity-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .cart-item-actions .quantity-controls span {
+        min-width: 30px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .cart-summary {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        position: sticky;
+        top: 20px;
+    }
+
+    .cart-summary h5 {
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .cart-summary p {
+        margin: 0;
+    }
+
+    .cart-summary .total {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .cart-summary .text-success {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .custom-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 30px;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0, 128, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #28a745;
+        transform: translateY(-2px);
+    }
+
+    .custom-btn:disabled {
+        background-color: #d6d6d6;
+        cursor: not-allowed;
+    }
+
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.payment-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.payment-timer {
+    font-size: 16px;
+    color: #ff5722;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.payment-methods .payment-option {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.payment-methods label {
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.payment-methods .sub-options {
+    margin-left: 20px;
+    display: none;
+}
+
+.payment-methods input[type="radio"]:checked + label + .sub-options {
+    display: block;
+}
+
+.price-details {
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+    padding-top: 10px;
+}
+
+.price-details p, .price-details h4 {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.price-details h4 {
+    font-size: 18px;
+    color: #333;
+}
+</style>
 
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-<body >
+<body>
     <div class="container my-5">
-        <h1 class="text-center mb-4 ">Your Orders</h1>
+        <h1 class="text-center mb-4">Your Orders</h1>
 
         <?php if (!empty($data['cartItems'])): ?>
-            <div class="row">
-                <?php foreach ($data['cartItems'] as $item): ?>
-                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                        <div class="card">
-                            <img src="/shopMVC2/public/<?= htmlspecialchars($item->image_path) ?>" 
-                                 class="card-img-top" 
-                                 alt="<?= htmlspecialchars($item->product_name) ?>">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= htmlspecialchars($item->product_name) ?></h5>
-                             </div>
-                             <p class="card-text text-center">Price: Rs <?= number_format($item->price, 2) ?></p>
-                            <p class="card-text text-center">Quantity: <?= htmlspecialchars($item->cart_quantity) ?></p>
+        <div class="row">
+            
 
+            <!-- Accordion for Order Summary, Delivery Address, Payment Method -->
+            <div class="col-md-8">
+                <div class="accordion" id="orderAccordion">
+                    <!-- Order Summary -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#orderSummary" aria-expanded="false" aria-controls="orderSummary">
+                                <strong>Order Summary</strong>
+                            </button>
+                        </h2>
+                        <div id="orderSummary" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#orderAccordion">
+                            <div class="accordion-body">
+                                <?php foreach ($data['cartItems'] as $item): ?>
+                                    <div class="cart-item">
+                                        <img src="/shopMVC2/public/<?= htmlspecialchars($item->image_path) ?>" alt="<?= htmlspecialchars($item->product_name) ?>" class="img-fluid">
+                                        <div class="cart-item-details">
+                                            <h5><?= htmlspecialchars($item->product_name) ?></h5>
+                                            <p class="text-muted"><?= htmlspecialchars($item->product_description) ?></p>
+                                            <p>
+                                                <span class="text-muted text-decoration-line-through">Rs <?= number_format($item->original_price, 2) ?></span>
+                                                <span class="text-success">Rs <?= number_format($item->price, 2) ?></span>
+                                                <span class="text-danger">(<?= htmlspecialchars($item->discount) ?>% off)</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
+
+                    <!-- Delivery Address -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#deliveryAddress" aria-expanded="false" aria-controls="deliveryAddress">
+                                <strong>Delivery Address</strong>
+                            </button>
+                        </h2>
+                        <div id="deliveryAddress" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#orderAccordion">
+                            <div class="accordion-body">
+                                <!-- Display saved address or form to add address -->
+                                <div id="saved-addresses" class="card p-4 shadow-sm my-4" style="display: <?php echo !empty($data['userAddresses']) ? 'block' : 'none'; ?>;">
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="text-primary mb-0">Shipping Address</h4>
+        <div class="ms-3">
+            <button id="edit-address" class="btn btn-warning btn-sm me-2">Edit</button>
+            <button id="delete-address" class="btn btn-danger btn-sm">Delete</button>
+        </div>
+    </div>
+    
+    <?php if (!empty($data1['userAddresses'])): ?>
+        <?php foreach ($data1['userAddresses'] as $address): ?>
+            <div class="address-item mb-3">
+                <p id="display-address" class="mb-0">
+                    <?= $address['address_line1'] ?>, <?= $address['city'] ?>, <?= $address['state'] ?> - <?= $address['zip'] ?>, <?= $address['country'] ?>
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-warning btn-sm me-2">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No addresses saved yet.</p>
+    <?php endif; ?>
+</div>
+
+                                <div class="text-center mt-4">
+                                    <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal" data-bs-target="#addressModal">
+                                        Add Address
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentMethod" aria-expanded="false" aria-controls="paymentMethod">
+                                <strong>Payment Method</strong>
+                            </button>
+                        </h2>
+                        <div id="paymentMethod" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#orderAccordion">
+                            <div class="accordion-body">
+                                <!-- Payment Method Options -->
+                                <div class="payment-container">
+                                    <div class="payment-timer">
+                                        Complete payment in <span id="timer">00:13:27</span>
+                                    </div>
+                                    <div class="payment-methods">
+                <!-- UPI Option -->
+                <div class="payment-option">
+                    <input type="radio" id="upi" name="payment" />
+                    <label for="upi">UPI</label>
+                    <div class="sub-options">
+                        <input type="radio" id="phonepe" name="upi-option">
+                        <label for="phonepe">PhonePe</label><br>
+                        <input type="radio" id="upi-id" name="upi-option">
+                        <label for="upi-id">Google Pay</label>
+                    </div>
+                </div>
+
+                <!-- Wallets Option -->
+                <div class="payment-option">
+                    <input type="radio" id="wallets" name="payment" />
+                    <label for="wallets">PayPal</label>
+                </div>
+
+                <!-- Credit/Debit Cards Option -->
+                <div class="payment-option">
+                    <input type="radio" id="cards" name="payment" />
+                    <label for="cards">Stripe</label>
+                </div>
+
+                <!-- Net Banking Option -->
+                <div class="payment-option">
+                    <input type="radio" id="netbanking" name="payment" />
+                    <label for="netbanking">Net Banking</label>
+                </div>
+
+                <!-- Cash on Delivery Option -->
+                <div class="payment-option">
+                    <input type="radio" id="cod" name="payment" />
+                    <label for="cod">Cash on Delivery</label>
+                </div>
+            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
 
-            <div class="d-flex justify-content-between">
-                <p><strong>Total Items: <?= htmlspecialchars($data['totalItems']); ?></strong></p>
-                <p><strong> Price: Rs <?= number_format($data['totalPrice'], 2); ?></strong></p>
+
+                <div class="col-md-4 static-summary">
+                <div class="cart-summary ">
+                    <h5>PRICE DETAILS</h5>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <p>Price (<?= htmlspecialchars($data['totalItems']); ?> items)</p>
+                        <p>Rs <?= number_format($data['totalPrice'], 2); ?></p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p>Discount</p>
+                        <p class="text-success">- Rs <?= number_format($data['totalDiscount'], 2); ?></p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p>Delivery Charges</p>
+                        <p class="text-success">Free</p>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total Amount</strong>
+                        <strong class="total">Rs <?= number_format($data['finalAmount'], 2); ?></strong>
+                    </div>
+                    <p class="text-success mt-2">You will save Rs <?= number_format($data['totalDiscount'], 2); ?> on this order</p>
+                </div>
             </div>
 
-            <!-- Card for Address and Payment Form -->
-            <div class="card p-4 shadow-lg mx-auto" style="max-width: 500px;">
-                <h4 class="card-title text-center mb-4 text-primary">Shipping Address</h4>
-                <form action="<?php echo URLROOT; ?>/orderController/payment" method="POST">
-                    <div class="mb-3">
-                        <label for="line1" class="form-label">Address Line 1</label>
-                        <input type="text" id="line1" name="line1" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="line2" class="form-label">Address Line 2</label>
-                        <input type="text" id="line2" name="line2" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="city" class="form-label">City</label>
-                        <input type="text" id="city" name="city" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="state" class="form-label">State/Province</label>
-                        <input type="text" id="state" name="state" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="zip" class="form-label">Postal Code/Zip</label>
-                        <input type="text" id="zip" name="zip" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="country" class="form-label">Country</label>
-                        <input type="text" id="country" name="country" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="shipping_method" class="form-label">Shipping Method</label>
-                        <select id="shipping_method" name="shipping_method" class="form-select" required>
-                            <option value="PayPal">PayPal</option>
-                            <option value="Stripe">Stripe</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-success w-100 ">Proceed to Payment</button>
-                </form >
+                <!-- Proceed to Payment Button -->
+                <div class="text-center mt-4">
+                    <a href="<?php echo URLROOT; ?>/orderController/payment" id="proceed-button" class="btn btn-success custom-btn" id="proceed-link" disabled>Proceed to Payment</a>
+                </div>
             </div>
+        </div>
 
-            <div class="mt-3 text-center">
-            <a href="<?= ($_SESSION['user_role'] === 'Admin') ? URLROOT . '/productController' : URLROOT ; ?>" class="btn btn-outline-secondary">
-    Back To Products
-</a> </div>
+        <!-- Address Modal -->
+        <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addressModalLabel">Add Shipping Address</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="address-form" action="<?php echo URLROOT; ?>/userController/addAddress" method="POST">
+    <div class="modal-body">
+        <div class="mb-3">
+            <label for="line1" class="form-label">Address Line 1</label>
+            <input type="text" id="line1" name="line1" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="line2" class="form-label">Address Line 2</label>
+            <input type="text" id="line2" name="line2" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" id="city" name="city" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="state" class="form-label">State/Province</label>
+            <input type="text" id="state" name="state" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="zip" class="form-label">Postal Code/Zip</label>
+            <input type="text" id="zip" name="zip" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input type="text" id="country" name="country" class="form-control" required>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save Address</button>
+    </div>
+</form>
+
+                </div>
+            </div>
+        </div>
 
         <?php else: ?>
-            <p class="text-center">Your orders are empty.</p>
-            <div class="text-center">
-                <a href="<?php echo URLROOT; ?>/productController" class="btn btn-outline-secondary">Back to Products</a>
-            </div>
+        <p class="text-center">Your orders are empty.</p>
+        <div class="text-center">
+            <a href="<?php echo URLROOT; ?>/productController" class="btn btn-outline-secondary">Back to Products</a>
+        </div>
         <?php endif; ?>
     </div>
 
-    <!-- Bootstrap JS (optional for extra interactivity) -->
+    <!-- Bootstrap JS and Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        document.getElementById("addressForm").addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    const formData = new FormData(this);
+
+    fetch("<?php echo URLROOT; ?>/UserController/addAddress", {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                alert("Address saved successfully!");
+                location.reload(); // Reload the page or update the UI dynamically
+            } else {
+                alert("Failed to save address. Please try again.");
+            }
+        })
+        .catch((error) => console.error("Error:", error));
+});
+
+
+
+    </script>
 </body>
 </html>

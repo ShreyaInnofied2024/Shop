@@ -220,4 +220,38 @@ public function deleteUser($id)
     }
 }
 
+public function addAddress() {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Sanitize POST data
+        $_POST = filter_input_array(INPUT_POST);
+
+        // Combine address fields
+        $fullAddress = trim($_POST['line1']);
+        if (!empty($_POST['line2'])) {
+            $fullAddress .= ', ' . trim($_POST['line2']);
+        }
+        $fullAddress .= ', ' . trim($_POST['city']) . ', ' . trim($_POST['state']);
+        $fullAddress .= ', ' . trim($_POST['zip']) . ', ' . trim($_POST['country']);
+
+        // Prepare data for the model
+        $addressData = [
+            'user_id' => $_SESSION['user_id'], // Assuming user_id is stored in session
+            'address' => $fullAddress,
+        ];
+
+        // Save address using the model
+        if ($this->user->addAddress($addressData)) {
+            flash('address_message', 'Address added successfully!');
+            redirect('orderController/checkout');
+        } else {
+            flash('address_message', 'Something went wrong. Please try again.', 'alert alert-danger');
+            redirect('orderController/checkout');
+        }
+    } else {
+        redirect('orderController/checkout');
+    }
+}
+
+
+
 }

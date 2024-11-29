@@ -116,6 +116,17 @@
                     $this->db->execute();
                 }
             }
+
+// In UserModel.php
+public function getAddressesByUserId($userId) {
+    $sql = "SELECT * FROM addresses WHERE user_id = :user_id";
+    $this->db->query($sql);
+    $this->db->bind(':user_id', $userId, PDO::PARAM_INT);
+    $this->db->execute();
+    return $this->db->resultSet(); // Return all addresses as an associative array
+}
+
+
             
             
             

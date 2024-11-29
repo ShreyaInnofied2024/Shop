@@ -4,6 +4,7 @@ class OrderController extends Controller{
     private $order;
     private $cart;
     private $product;
+    private $user;
     private $stripeServices;
 
     public function __construct() {
@@ -19,6 +20,7 @@ class OrderController extends Controller{
         $this->order = $this->model('OrderModel');
         $this->cart=$this->model('CartModel');
         $this->product=$this->model('ProductModel');
+        $this->user=$this->model('UserModel');
         $this->stripeServices = new StripeService();
     }
 
@@ -242,6 +244,15 @@ public function details($order_id) {
     // Pass data to the view
     $this->view('order/details', $data);
 }
+
+            public function getUserAddresses() {
+                $userId = $_SESSION['user_id']; // Assuming user_id is stored in the session
+                $addresses = $this->user->getAddressesByUserId($userId); // Retrieve addresses from the database
+                $data1 = [
+                    'userAddresses' => $addresses
+                ];
+                $this->view('order/view', $data1); // Pass the addresses to the view
+            }
 
 }
 

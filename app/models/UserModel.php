@@ -103,6 +103,19 @@ public function deleteUserById($id)
     }
 }
 
+public function addAddress($data)
+{
+    $this->db->query('INSERT INTO addresses (user_id, address) VALUES (:user_id, :address)');
+
+    // Bind values
+    $this->db->bind(':user_id', $data['user_id']);
+    $this->db->bind(':address', $data['address']);
+
+    // Execute and return the result
+    return $this->db->execute();
+}
+
+
     
 
 }
