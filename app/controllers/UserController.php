@@ -1,9 +1,12 @@
 <?php
 class UserController extends Controller{
     private $user;
+    private $order;
     public function __construct()
     {
         $this->user=$this->model('UserModel');
+
+        $this->order=$this->model('OrderModel');
     }
 
     public function register(){
@@ -251,6 +254,81 @@ public function addAddress() {
         redirect('orderController/checkout');
     }
 }
+
+
+    // Function to delete an address
+    public function deleteAddress()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $addressId = $_POST['address_id'];
+
+            // Validate address ID and delete
+            if ($this->user->deleteAddress($addressId)) {
+                flash('address_message', 'Address deleted successfully');
+            } else {
+                flash('address_message', 'Failed to delete address', 'alert alert-danger');
+            }
+
+            // Redirect back to the delivery addresses page
+            redirect('orderController/checkout');
+        } else {
+            redirect('orderController/checkout');
+        }
+    }
+
+    // Function to edit an address
+    public function editAddress($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST);
+            $fullAddress = trim($_POST['line1']);
+            if (!empty($_POST['line2'])) {
+                $fullAddress .= ', ' . trim($_POST['line2']);
+            }
+            $fullAddress .= ', ' . trim($_POST['city']) . ', ' . trim($_POST['state']);
+            $fullAddress .= ', ' . trim($_POST['zip']) . ', ' . trim($_POST['country']);
+    
+            // Prepare data for the model
+            $addressData = [
+                'user_id' => $_SESSION['user_id'], // Assuming user_id is stored in session
+                'address' => $fullAddress,
+                'address_err'=>''
+            ];
+
+            // Validate address
+            if (empty($data['address'])) {
+                $data['address_err'] = 'Please enter an address';
+            }
+
+            // Check for errors
+            if (empty($data['address_err'])) {
+                // Update address
+                if ($this->user->updateAddress($data)) {
+                    flash('address_message', 'Address updated successfully');
+                    redirect('orderController/checkout');
+                } else {
+                    flash('address_message', 'Failed to update address', 'alert alert-danger');
+                }
+            } 
+        } else {
+            // Get the current address data
+            $address = $this->order->getAddressById($id);
+
+            if ($address) {
+                $data = [
+                    'id' => $id,
+                    'address' => $address->address
+                ];
+
+                $this->view('users/edit_address', $data);
+            } else {
+                flash('address_message', 'Address not found', 'alert alert-danger');
+                redirect('orderController');
+            }
+        }
+    }
+
 
 
 

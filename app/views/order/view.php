@@ -268,33 +268,35 @@
                         </h2>
                         <div id="deliveryAddress" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#orderAccordion">
                             <div class="accordion-body">
-                                <!-- Display saved address or form to add address -->
-                                <div id="saved-addresses" class="card p-4 shadow-sm my-4" style="display: <?php echo !empty($data['userAddresses']) ? 'block' : 'none'; ?>;">
-    <div class="d-flex justify-content-between align-items-center">
-        <h4 class="text-primary mb-0">Shipping Address</h4>
-        <div class="ms-3">
-            <button id="edit-address" class="btn btn-warning btn-sm me-2">Edit</button>
-            <button id="delete-address" class="btn btn-danger btn-sm">Delete</button>
-        </div>
+                            <?php foreach ($data['addresses'] as $addresses): ?>
+                                <div class="cart-item d-flex justify-content-between align-items-center">
+    <!-- Address Text -->
+    <p class="mb-0">
+        <span class="text-primary"><?= $addresses->address ?></span>
+    </p>
+
+    <!-- Buttons (Edit and Delete) -->
+    <div class="d-flex"><button type="button" class="btn btn-outline-primary btn-sm me-2 edit-address-btn" 
+        data-id="<?= $addresses->id ?>" 
+        data-line1="<?= htmlspecialchars($addresses->line1) ?>" 
+        data-line2="<?= htmlspecialchars($addresses->line2) ?>" 
+        data-city="<?= htmlspecialchars($addresses->city) ?>" 
+        data-state="<?= htmlspecialchars($addresses->state) ?>" 
+        data-zip="<?= htmlspecialchars($addresses->zip) ?>" 
+        data-country="<?= htmlspecialchars($addresses->country) ?>" 
+        data-bs-toggle="modal" data-bs-target="#editAddressModal">
+    Edit
+</button>
+
+        <form method="POST" action="<?= URLROOT; ?>/userController/deleteAddress">
+            <input type="hidden" name="address_id" value="<?= $addresses->id ?>">
+            <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+        </form>
     </div>
-    
-    <?php if (!empty($data1['userAddresses'])): ?>
-        <?php foreach ($data1['userAddresses'] as $address): ?>
-            <div class="address-item mb-3">
-                <p id="display-address" class="mb-0">
-                    <?= $address['address_line1'] ?>, <?= $address['city'] ?>, <?= $address['state'] ?> - <?= $address['zip'] ?>, <?= $address['country'] ?>
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <button class="btn btn-warning btn-sm me-2">Edit</button>
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No addresses saved yet.</p>
-    <?php endif; ?>
 </div>
 
+                                <?php endforeach; ?>
+                            
                                 <div class="text-center mt-4">
                                     <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal" data-bs-target="#addressModal">
                                         Add Address
@@ -440,6 +442,55 @@
             </div>
         </div>
 
+
+        <!-- Edit Address Modal -->
+<div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAddressModalLabel">Edit Shipping Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="edit-address-form" action="<?php echo URLROOT; ?>/userController/editAddress" method="POST">
+                <div class="modal-body">
+                    <!-- Hidden field for Address ID -->
+                    <input type="hidden" id="edit-address-id" name="address_id">
+
+                    <div class="mb-3">
+                        <label for="edit-line1" class="form-label">Address Line 1</label>
+                        <input type="text" id="edit-line1" name="line1" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-line2" class="form-label">Address Line 2</label>
+                        <input type="text" id="edit-line2" name="line2" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-city" class="form-label">City</label>
+                        <input type="text" id="edit-city" name="city" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-state" class="form-label">State/Province</label>
+                        <input type="text" id="edit-state" name="state" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-zip" class="form-label">Postal Code/Zip</label>
+                        <input type="text" id="edit-zip" name="zip" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-country" class="form-label">Country</label>
+                        <input type="text" id="edit-country" name="country" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
         <?php else: ?>
         <p class="text-center">Your orders are empty.</p>
         <div class="text-center">
@@ -473,6 +524,24 @@
         })
         .catch((error) => console.error("Error:", error));
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.edit-address-btn');
+    const editModal = document.getElementById('editAddressModal');
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            document.getElementById('edit-address-id').value = this.getAttribute('data-id');
+            document.getElementById('edit-line1').value = this.getAttribute('data-line1');
+            document.getElementById('edit-line2').value = this.getAttribute('data-line2');
+            document.getElementById('edit-city').value = this.getAttribute('data-city');
+            document.getElementById('edit-state').value = this.getAttribute('data-state');
+            document.getElementById('edit-zip').value = this.getAttribute('data-zip');
+            document.getElementById('edit-country').value = this.getAttribute('data-country');
+        });
+    });
+});
+
 
 
 

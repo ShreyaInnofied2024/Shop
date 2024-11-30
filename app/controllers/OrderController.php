@@ -29,10 +29,12 @@ class OrderController extends Controller{
         $cartItems = $this->cart->getUserCart($user_id);
         $totalItems=$this->cart->getTotalItems($user_id);
         $totalPrice=$this->cart->getTotalPrice($user_id);
+        $addresses = $this->order->getAddressesByUserId($user_id); // Retrieve addresses from the database
         $data=[
             'cartItems'=>$cartItems,
             'totalItems'=>$totalItems,
-            'totalPrice'=>$totalPrice
+            'totalPrice'=>$totalPrice,
+            'addresses'=>$addresses
         ];
         $this->view('order/view',$data);
     }
@@ -245,14 +247,6 @@ public function details($order_id) {
     $this->view('order/details', $data);
 }
 
-            public function getUserAddresses() {
-                $userId = $_SESSION['user_id']; // Assuming user_id is stored in the session
-                $addresses = $this->user->getAddressesByUserId($userId); // Retrieve addresses from the database
-                $data1 = [
-                    'userAddresses' => $addresses
-                ];
-                $this->view('order/view', $data1); // Pass the addresses to the view
-            }
 
 }
 
