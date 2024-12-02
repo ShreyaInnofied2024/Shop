@@ -129,7 +129,8 @@ class OrderController extends Controller{
             $products = $this->cart->getUserCart($user_id);
             foreach ($products as $product) {
                 $product_id = $product->product_id;
-                $quantity = $product->quantity;
+                $quantity = $product->cart_quantity;
+                echo "Updating product_id: $product_id, quantity: $quantity\n";
                 $this->product->updateproductQuantityOnPayment($product_id, $quantity);
             }
     

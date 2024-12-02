@@ -158,7 +158,7 @@
                     <hr>
                     <div class="d-flex justify-content-between">
                         <strong>Total Amount</strong>
-                        <strong class="total">Rs <?= number_format($data['finalAmount'], 2); ?></strong>
+                        <strong class="total">Rs <?= number_format($data['totalPrice'], 2); ?></strong>
                     </div>
                     <p class="text-success mt-2">You will save Rs <?= number_format($data['totalDiscount'], 2); ?> on this order</p>
                 </div>
