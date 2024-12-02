@@ -6,7 +6,9 @@
     <title>Your Orders</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
+ <!-- Bootstrap JS (after Bootstrap CSS) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   <!-- Custom CSS -->
     <link rel="stylesheet" href="/shopMVC2/public/css/style.css">
 </head>
 <style>
@@ -269,33 +271,39 @@
                         <div id="deliveryAddress" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#orderAccordion">
                             <div class="accordion-body">
                             <?php foreach ($data['addresses'] as $addresses): ?>
-                                <div class="cart-item d-flex justify-content-between align-items-center">
-    <!-- Address Text -->
-    <p class="mb-0">
-        <span class="text-primary"><?= $addresses->address ?></span>
-    </p>
+    <?php
+    $addressParts = explode(',', $addresses->address);
+    ?>
+    <div class="cart-item d-flex justify-content-between align-items-center">
+        <p class="mb-0"><span class="text-primary"><?= $addresses->address ?></span></p>
 
-    <!-- Buttons (Edit and Delete) -->
-    <div class="d-flex"><button type="button" class="btn btn-outline-primary btn-sm me-2 edit-address-btn" 
-        data-id="<?= $addresses->id ?>" 
-        data-line1="<?= htmlspecialchars($addresses->line1) ?>" 
-        data-line2="<?= htmlspecialchars($addresses->line2) ?>" 
-        data-city="<?= htmlspecialchars($addresses->city) ?>" 
-        data-state="<?= htmlspecialchars($addresses->state) ?>" 
-        data-zip="<?= htmlspecialchars($addresses->zip) ?>" 
-        data-country="<?= htmlspecialchars($addresses->country) ?>" 
-        data-bs-toggle="modal" data-bs-target="#editAddressModal">
-    Edit
-</button>
-
-        <form method="POST" action="<?= URLROOT; ?>/userController/deleteAddress">
-            <input type="hidden" name="address_id" value="<?= $addresses->id ?>">
-            <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+        <div class="d-flex align-items-center">
+        <form method="POST" id="addressForm" class="mb-0">
+            <input type="hidden" id="selected_address_id" name="selected_address_id" value="<?= $addresses->id ?>">
+            <button class="btn btn-outline-success btn-sm select-address-btn" type="button" data-address-id="<?= $addresses->id ?>">Select</button>
         </form>
-    </div>
+    <button type="button" class="btn btn-outline-primary btn-sm me-2 edit-address-btn" 
+        data-id="<?= $addresses->id ?>" 
+        data-line1="<?= isset($addressParts[0]) ? trim($addressParts[0]) : '' ?>" 
+        data-line2="<?= isset($addressParts[1]) ? trim($addressParts[1]) : '' ?>" 
+        data-city="<?= isset($addressParts[2]) ? trim($addressParts[2]) : '' ?>" 
+        data-state="<?= isset($addressParts[3]) ? trim($addressParts[3]) : '' ?>" 
+        data-zip="<?= isset($addressParts[4]) ? trim($addressParts[4]) : '' ?>" 
+        data-country="<?= isset($addressParts[5]) ? trim($addressParts[5]) : '' ?>" 
+        data-bs-toggle="modal" data-bs-target="#editAddressModal">
+        Edit
+    </button>
+
+    <form method="POST" action="<?= URLROOT; ?>/userController/deleteAddress" class="mb-0">
+        <input type="hidden" name="address_id" value="<?= $addresses->id ?>">
+        <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+    </form>
 </div>
 
-                                <?php endforeach; ?>
+
+    </div>
+<?php endforeach; ?>
+
                             
                                 <div class="text-center mt-4">
                                     <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal" data-bs-target="#addressModal">
@@ -315,53 +323,31 @@
                         </h2>
                         <div id="paymentMethod" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#orderAccordion">
                             <div class="accordion-body">
-                                <!-- Payment Method Options -->
-                                <div class="payment-container">
-                                    <div class="payment-timer">
-                                        Complete payment in <span id="timer">00:13:27</span>
+                                <div class="payment-methods">
+                                    <div class="payment-option">
+                                        <input type="radio" id="upi" name="payment" value="UPI" />
+                                        <label for="upi">UPI</label>
                                     </div>
-                                    <div class="payment-methods">
-                <!-- UPI Option -->
-                <div class="payment-option">
-                    <input type="radio" id="upi" name="payment" />
-                    <label for="upi">UPI</label>
-                    <div class="sub-options">
-                        <input type="radio" id="phonepe" name="upi-option">
-                        <label for="phonepe">PhonePe</label><br>
-                        <input type="radio" id="upi-id" name="upi-option">
-                        <label for="upi-id">Google Pay</label>
-                    </div>
-                </div>
 
-                <!-- Wallets Option -->
-                <div class="payment-option">
-                    <input type="radio" id="wallets" name="payment" />
-                    <label for="wallets">PayPal</label>
-                </div>
+                                    <div class="payment-option">
+                                        <input type="radio" id="paypal" name="payment" value="PayPal" />
+                                        <label for="paypal">PayPal</label>
+                                    </div>
 
-                <!-- Credit/Debit Cards Option -->
-                <div class="payment-option">
-                    <input type="radio" id="cards" name="payment" />
-                    <label for="cards">Stripe</label>
-                </div>
+                                    <div class="payment-option">
+                                        <input type="radio" id="stripe" name="payment" value="Stripe" />
+                                        <label for="stripe">Stripe</label>
+                                    </div>
 
-                <!-- Net Banking Option -->
-                <div class="payment-option">
-                    <input type="radio" id="netbanking" name="payment" />
-                    <label for="netbanking">Net Banking</label>
-                </div>
-
-                <!-- Cash on Delivery Option -->
-                <div class="payment-option">
-                    <input type="radio" id="cod" name="payment" />
-                    <label for="cod">Cash on Delivery</label>
-                </div>
-            </div>
+                                    <div class="payment-option">
+                                        <input type="radio" id="cod" name="payment" value="COD" />
+                                        <label for="cod">Cash on Delivery</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
 
 
@@ -392,9 +378,9 @@
 
                 <!-- Proceed to Payment Button -->
                 <div class="text-center mt-4">
-                    <a href="<?php echo URLROOT; ?>/orderController/payment" id="proceed-button" class="btn btn-success custom-btn" id="proceed-link" disabled>Proceed to Payment</a>
-                </div>
+                <button type="button" id="proceed-to-payment" class="btn btn-success custom-btn" disabled>Proceed to Payment</button>
             </div>
+        </div>
         </div>
 
         <!-- Address Modal -->
@@ -444,6 +430,9 @@
 
 
         <!-- Edit Address Modal -->
+
+        <!-- Edit Address Modal -->
+<!-- Edit Address Modal -->
 <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -453,42 +442,41 @@
             </div>
             <form id="edit-address-form" action="<?php echo URLROOT; ?>/userController/editAddress" method="POST">
                 <div class="modal-body">
-                    <!-- Hidden field for Address ID -->
-                    <input type="hidden" id="edit-address-id" name="address_id">
-
+                    <input type="hidden" id="editAddressId" name="id">
                     <div class="mb-3">
-                        <label for="edit-line1" class="form-label">Address Line 1</label>
-                        <input type="text" id="edit-line1" name="line1" class="form-control" required>
+                        <label for="editLine1" class="form-label">Address Line 1</label>
+                        <input type="text" id="editLine1" name="line1" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit-line2" class="form-label">Address Line 2</label>
-                        <input type="text" id="edit-line2" name="line2" class="form-control">
+                        <label for="editLine2" class="form-label">Address Line 2</label>
+                        <input type="text" id="editLine2" name="line2" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label for="edit-city" class="form-label">City</label>
-                        <input type="text" id="edit-city" name="city" class="form-control" required>
+                        <label for="editCity" class="form-label">City</label>
+                        <input type="text" id="editCity" name="city" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit-state" class="form-label">State/Province</label>
-                        <input type="text" id="edit-state" name="state" class="form-control" required>
+                        <label for="editState" class="form-label">State/Province</label>
+                        <input type="text" id="editState" name="state" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit-zip" class="form-label">Postal Code/Zip</label>
-                        <input type="text" id="edit-zip" name="zip" class="form-control" required>
+                        <label for="editZip" class="form-label">Postal Code/Zip</label>
+                        <input type="text" id="editZip" name="zip" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit-country" class="form-label">Country</label>
-                        <input type="text" id="edit-country" name="country" class="form-control" required>
+                        <label for="editCountry" class="form-label">Country</label>
+                        <input type="text" id="editCountry" name="country" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update Address</button>
+                    <button type="submit" class="btn btn-primary">Save Address</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 
 
         <?php else: ?>
@@ -504,7 +492,29 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        document.getElementById("addressForm").addEventListener("submit", function (e) {
+        
+
+    // Add jQuery to fill the modal inputs when "Edit" button is clicked
+    $(document).on('click', '.edit-address-btn', function () {
+        var addressId = $(this).data('id');
+        var line1 = $(this).data('line1');
+        var line2 = $(this).data('line2');
+        var city = $(this).data('city');
+        var state = $(this).data('state');
+        var zip = $(this).data('zip');
+        var country = $(this).data('country');
+
+        // Set values in the modal
+        $('#editAddressId').val(addressId);
+        $('#editLine1').val(line1);
+        $('#editLine2').val(line2);
+        $('#editCity').val(city);
+        $('#editState').val(state);
+        $('#editZip').val(zip);
+        $('#editCountry').val(country);
+    });
+
+    document.getElementById("addressForm").addEventListener("submit", function (e) {
     e.preventDefault(); // Prevent the default form submission
 
     const formData = new FormData(this);
@@ -525,26 +535,125 @@
         .catch((error) => console.error("Error:", error));
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const editButtons = document.querySelectorAll('.edit-address-btn');
-    const editModal = document.getElementById('editAddressModal');
+document.getElementById("edit-address-form").addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent the default form submission
 
-    editButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            document.getElementById('edit-address-id').value = this.getAttribute('data-id');
-            document.getElementById('edit-line1').value = this.getAttribute('data-line1');
-            document.getElementById('edit-line2').value = this.getAttribute('data-line2');
-            document.getElementById('edit-city').value = this.getAttribute('data-city');
-            document.getElementById('edit-state').value = this.getAttribute('data-state');
-            document.getElementById('edit-zip').value = this.getAttribute('data-zip');
-            document.getElementById('edit-country').value = this.getAttribute('data-country');
-        });
-    });
+    const formData = new FormData(this);
+
+    fetch("<?php echo URLROOT; ?>/UserController/editAddress", {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                alert("Address edited successfully!");
+                location.reload(); // Reload the page or update the UI dynamically
+            } else {
+                alert("Failed to edit address. Please try again.");
+            }
+        })
+        .catch((error) => console.error("Error:", error));
 });
 
+    function redirectToPage(paymentOption) {
+        let url = '';
+        
+        switch(paymentOption) {
+            case 'PhonePe':
+                url = 'https://www.phonepe.com/';  // Replace with your UPI page URL
+                break;
+                case 'GooglePay':
+                url = 'https://payments.google.com/gp/w/home/signup';  // Replace with your UPI page URL
+                break;
+            case 'PayPal':
+                url = 'paypal_page.html';  // Replace with your PayPal page URL
+                break;
+            case 'Stripe':
+                url = 'stripe_page.html';  // Replace with your Stripe page URL
+                break;
+            case 'Bank':
+                url = 'https://www.onlinesbi.sbi/';  // Replace with your Net Banking page URL
+                break;
+            default:
+                break;
+        }
 
+        if (url) {
+            window.location.href = url;
+        }
+    }
+    let selectedAddressId = null;
+        let selectedPaymentMethod = null;
 
+        // Address selection
+        document.querySelectorAll('.select-address-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                selectedAddressId = this.getAttribute('data-address-id');
+                document.querySelectorAll('.select-address-btn').forEach(btn => btn.classList.remove('btn-success'));
+                this.classList.add('btn-success');
+                enableProceedButton();
+            });
+        });
+
+        // Payment method selection
+        document.querySelectorAll('input[name="payment"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                selectedPaymentMethod = this.value;
+                enableProceedButton();
+            });
+        });
+
+        // Enable proceed to payment button
+        function enableProceedButton() {
+            if (selectedAddressId && selectedPaymentMethod) {
+                document.getElementById('proceed-to-payment').disabled = false;
+            } else {
+                document.getElementById('proceed-to-payment').disabled = true;
+            }
+        }
+
+        // Proceed to payment
+        document.getElementById('proceed-to-payment').addEventListener('click', function() {
+            // Submit the form with selected address and payment method
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '<?= URLROOT; ?>/OrderController/payment';
+
+            let addressField = document.createElement('input');
+            addressField.type = 'hidden';
+            addressField.name = 'selected_address_id';
+            addressField.value = selectedAddressId;
+            form.appendChild(addressField);
+
+            let paymentField = document.createElement('input');
+            paymentField.type = 'hidden';
+            paymentField.name = 'payment_method';
+            paymentField.value = selectedPaymentMethod;
+            form.appendChild(paymentField);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
 
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+                    
+
+            
+
+        
+
+    

@@ -45,19 +45,26 @@ class OrderController extends Controller{
         $cartItems = $this->cart->getUserCart($user_id); // Fetch cart items
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Collect shipping address from the form
+            // Collect form data
             $_ADDRESS = filter_input_array(INPUT_POST);
-            $address = trim($_ADDRESS['line1']) . " " . trim($_ADDRESS['line2']) . " " .
-                       trim($_ADDRESS['city']) . " " . trim($_ADDRESS['state']) . " " .
-                       trim($_ADDRESS['country']) . " " . trim($_ADDRESS['zip']);
-            $totalPrice = $this->cart->getTotalPrice($user_id); // Get total price from cart
+            
+            // Get selected address and payment method
+            $address_id = $_ADDRESS['selected_address_id']; 
+        
+        // Fetch the full address from the database using the selected address ID
+            $fullAddress = $this->order->getAddressById($address_id, $user_id); // Assume this method fetches the full address
+            $fullAddress = $fullAddress->address;
+            $paymentMethod = $_ADDRESS['payment_method']; // Get the selected payment method (PayPal, Stripe, etc.)
+            
+            // Get total price from the cart
+            $totalPrice = $this->cart->getTotalPrice($user_id); 
             
             // Prepare the order data
             $data = [
                 'user_id' => $user_id,
-                'address' => $address,
+                'address' => $fullAddress,
                 'total_amount' => $totalPrice,
-                'shipping_method' => $_ADDRESS['shipping_method']
+                'shipping_method' => $paymentMethod // Store the payment method (shipping method)
             ];
             
             // Step 1: Save the order and get the order ID
@@ -79,11 +86,13 @@ class OrderController extends Controller{
                     'totalPrice' => $totalPrice
                 ];
                     
-                if ($_ADDRESS['shipping_method'] == 'PayPal') {
+                if ($paymentMethod == 'PayPal') {
+                    // Redirect to the PayPal payment page
                     $this->view('paypal/index', $data);
                 }
                     
-                if ($_ADDRESS['shipping_method'] == 'Stripe') {
+                if ($paymentMethod == 'Stripe') {
+                    // Redirect to the Stripe checkout page
                     $checkoutURL = $this->stripeServices->createCheckoutSession($cartItems, $user_id);
                         
                     if ($checkoutURL) {
@@ -92,6 +101,7 @@ class OrderController extends Controller{
                         exit();
                     } else {
                         // Handle error for Stripe checkout creation
+                        // You can add a fallback or error handling logic here
                     }
                 }
             } else {
@@ -101,6 +111,7 @@ class OrderController extends Controller{
             }
         }
     }
+    
     
     
     
@@ -246,6 +257,7 @@ public function details($order_id) {
     // Pass data to the view
     $this->view('order/details', $data);
 }
+
 
 
 }

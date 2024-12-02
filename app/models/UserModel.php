@@ -115,6 +115,22 @@ public function addAddress($data)
     return $this->db->execute();
 }
 
+public function updateAddress($data) {
+    $this->db->query('UPDATE addresses SET address = :address WHERE id = :id');
+    $this->db->bind(':id', $data['id']);
+    $this->db->bind(':address', $data['address']);
+    return $this->db->execute();
+}
+
+public function deleteAddress($id)
+{
+    $this->db->query("DELETE FROM addresses WHERE id = :id");
+    $this->db->bind(':id', $id);
+
+    return $this->db->execute();
+}
+
+
 
     
 

@@ -30,7 +30,7 @@
                     $this->db->query("INSERT INTO orders (user_id, address, total_amount, shipping_method, status) 
                                       VALUES (:user_id, :address, :total_amount, :shipping_method, 'pending')");
                     $this->db->bind(':user_id', $data['user_id']);
-                    $this->db->bind(':address', $data['address']);
+                    $this->db->bind(':address', $data['address'],PDO::PARAM_STR);
                     $this->db->bind(':total_amount', $data['total_amount']);
                     $this->db->bind(':shipping_method', $data['shipping_method']);
             
@@ -125,6 +125,28 @@ public function getAddressesByUserId($userId) {
     $this->db->execute();
     return $this->db->resultSet(); // Return all addresses as an associative array
 }
+
+public function getAddressById($addressId, $userId) {
+    // Query to fetch the full address for the given address ID and user ID
+    $query = "SELECT address FROM addresses WHERE id = :address_id AND user_id = :user_id";
+    
+    // Prepare the query
+    $this->db->query($query);
+    
+    // Bind the parameters
+    $this->db->bind(':address_id', $addressId, PDO::PARAM_INT);
+    $this->db->bind(':user_id', $userId, PDO::PARAM_INT);
+    
+    // Execute the query
+    $this->db->execute();
+
+    // Fetch the address
+    $address = $this->db->single(); // This should return a single result
+
+    return $address;
+}
+
+
 
 
             
