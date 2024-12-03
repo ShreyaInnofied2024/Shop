@@ -30,9 +30,9 @@
                 <?php foreach($data['products'] as $product): ?>
                     <tr class="text-center">
                         <td><?= $product->id; ?></td>
-                        <td><?= $product->name; ?></td>
+                        <td><a style="text-decoration :none; color:black ;" href="<?= URLROOT; ?>/productController/show/<?= $product->id; ?>"><?= $product->name; ?></a></td>
                         <td><?= $product->quantity; ?></td>
-                        <td>$<?= number_format($product->price, 2); ?></td>
+                        <td>Rs<?= number_format($product->price, 2); ?></td>
                         <td><?= ucfirst($product->type); ?></td>
                         <td><?= $product->category_name; ?></td>
                         <td>
@@ -40,8 +40,7 @@
                                 <a href="<?= URLROOT; ?>/productController/edit/<?= $product->id; ?>" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="<?= URLROOT; ?>/productController/delete/<?= $product->id; ?>" class="btn btn-danger btn-sm">Delete</a>
                             <?php endif; ?>
-                            <a href="<?= URLROOT; ?>/productController/show/<?= $product->id; ?>" class="btn btn-info btn-sm">View</a>
-                            <?php if(!isAdmin()): ?>
+                           <?php if(!isAdmin()): ?>
                                 <a href="<?= URLROOT; ?>/cartController/add/<?= $product->id; ?>" class="btn btn-success btn-sm">Add to Cart</a>
                             <?php endif; ?>
                         </td>

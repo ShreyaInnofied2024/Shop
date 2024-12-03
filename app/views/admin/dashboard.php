@@ -19,7 +19,7 @@
                 <div class="card text-white bg-success shadow mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Total Revenue</h5>
-                        <h3>$<?= number_format($data['totalRevenue'], 2); ?></h3>
+                        <h3>Rs <?= ($data['totalRevenue']); ?></h3>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
         </div>
 
         <!-- Customer Summary -->
-        <div class="col-12 text-center">
+        <div class="col-12 text-center" style="margin-top: 10px;">
             <div class="card shadow bg-light mb-4">
                 <div class="card-body">
                     <h5 class="card-title">Total Customers</h5>

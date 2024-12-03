@@ -1,9 +1,8 @@
-
-
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
 <style>
-     .container {
+/* General Container Styling */
+.container {
     padding: 50px 15px;
 }
 
@@ -23,77 +22,7 @@
     border-radius: 5px;
 }
 
-.table-striped {
-    background-color: #f8f9fa;
-}
-
-.table-striped th,
-.table-striped td {
-    padding: 15px;
-    text-align: center;
-}
-
-.table-striped th {
-    background-color: #a27053;
-    color: white;
-    font-size: 16px;
-    text-transform: uppercase;
-}
-
-.table-striped td {
-    font-size: 14px;
-    color: #333;
-}
-
-.carousel {
-    border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-}
-
-.carousel-inner img {
-    border-radius: 10px;
-    max-height: 700px;
-    object-fit: cover;
-}
-
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    background-color: #a27053;
-}
-
-.product-details {
-    padding-left: 30px;
-    padding-top: 20px;
-}
-
-.product-details h4 {
-    font-family: 'Arial', sans-serif;
-    font-size: 28px;
-    color: #333;
-    font-weight: 600;
-}
-
-.product-details p {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #555;
-}
-
-.product-details p strong {
-    color: #a27053;
-}
-
-.product-details .btn {
-    background-color: #a27053;
-    color: white;
-    border-radius: 5px;
-    font-weight: 600;
-}
-
-.product-details .btn:hover {
-    background-color: #8c5e3c;
-}
-
+/* Flash Message Styling */
 .flash-message {
     font-size: 18px;
     padding: 15px;
@@ -108,24 +37,62 @@
     background-color: #e74c3c;
 }
 
-.carousel-inner {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-        height: 550px;
-    }
+/* Carousel Styling */
+.carousel {
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
 
-    .carousel-item {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.carousel-inner img {
+    border-radius: 10px;
+    max-height: 400px; /* Small Carousel Images */
+    object-fit: cover;
+    margin: auto;
+}
 
-    .img-custom {
-        width: 100%; /* Ensures the image spans the full width of the container */
-        height: 100%; /* Fixed height for uniformity */
-        object-fit: cover; /* Maintains aspect ratio and covers the area without distortion */
-    }
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #a27053;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+
+/* Product Details Styling */
+.product-details {
+    padding-left: 20px;
+}
+
+.product-details h4 {
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+}
+
+.product-details p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    font-weight: bold;
+}
+
+.product-details p strong {
+    color: #a27053;
+}
+
+.product-details .btn {
+    background-color: #a27053;
+    color: white;
+    border-radius: 5px;
+    font-weight: 600;
+    padding: 10px 20px;
+}
+
+.product-details .btn:hover {
+    background-color: #8c5e3c;
+}
+
 </style>
 
 <div class="container my-5">
@@ -133,9 +100,7 @@
     <div class="d-flex justify-content-between align-items-center page-header mb-4">
         <h1 class="text-uppercase">View Product</h1>
         <a href="<?= ($_SESSION['user_role'] === 'Admin') ? URLROOT . '/productController' : URLROOT ; ?>" 
-   class="btn btn-outline-secondary">
-   Go Back
-</a>
+           class="btn btn-outline-secondary">Go Back</a>
     </div>
 
     <!-- Flash Message -->
@@ -148,29 +113,27 @@
 
     <div class="row">
         <!-- Product Images Carousel -->
-        <div class="col-md-6">
-    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <?php if (count($data['images']) > 0): ?>
-                <?php $active = 'active'; // Set the first image as active ?>
-                <?php foreach ($data['images'] as $image): ?>
-                    <div class="carousel-item <?= $active; ?>">
-                        <img src="<?= URLROOT . '/' . $image->image_path; ?>" 
-                             class="d-block w-100 img-fluid img-custom" 
-                             alt="Product Image">
-                    </div>
-                    <?php $active = ''; // After first item, make others inactive ?>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="carousel-item active">
-                    <img src="<?= URLROOT; ?>/img/default-image.jpg" 
-                         class="d-block w-100 img-fluid img-custom" 
-                         alt="No image available">
+        <div class="col-md-5">
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <?php if (count($data['images']) > 0): ?>
+                        <?php $active = 'active'; // Set the first image as active ?>
+                        <?php foreach ($data['images'] as $image): ?>
+                            <div class="carousel-item <?= $active; ?>">
+                                <img src="<?= URLROOT . '/' . $image->image_path; ?>" 
+                                     class="d-block w-100 img-fluid img-custom" 
+                                     alt="Product Image">
+                            </div>
+                            <?php $active = ''; // After first item, make others inactive ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="carousel-item active">
+                            <img src="<?= URLROOT; ?>/img/default-image.jpg" 
+                                 class="d-block w-100 img-fluid img-custom" 
+                                 alt="No image available">
+                        </div>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
-        </div>
-
-
 
                 <!-- Carousel Controls -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
@@ -185,17 +148,16 @@
         </div>
 
         <!-- Product Details Section -->
-        <div class="col-md-6 product-details">
+        <div class="col-md-7 product-details">
             <h4><?= $data['product']->name; ?></h4>
             <p><strong>Quantity:</strong> <?= $data['product']->quantity; ?></p>
-            <p><strong>Price:</strong> $<?= number_format($data['product']->price, 2); ?></p>
+            <p><strong>Price:</strong> Rs <?= number_format($data['product']->price, 2); ?></p>
             <p><strong>Type:</strong> <?= ucfirst($data['product']->type); ?></p>
             <p><strong>Category:</strong> <?= $data['product']->category_name; ?></p>
             <?php if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] === 'Customer'): ?>
-    <a href="<?php echo URLROOT ?>/cartController/add/<?php echo $data['product']->id ?>" class="btn">Add to Cart</a>
-<?php endif; ?>
-
-
+                <a href="<?php echo URLROOT ?>/cartController/add/<?php echo $data['product']->id ?>" 
+                   class="btn mt-3">Add to Cart</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>

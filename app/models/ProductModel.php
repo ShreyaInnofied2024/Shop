@@ -229,7 +229,12 @@ public function getPaginatedProductsWithSingleImages($limit, $offset) {
             (SELECT pi.image_path 
              FROM product_images pi 
              WHERE pi.product_id = p.id
-             LIMIT 1) AS image_path
+             LIMIT 1) AS image_path,
+              CASE
+                WHEN p.quantity = 0 THEN 'Out of Stock'
+                WHEN p.quantity <= 5 THEN CONCAT('Only ', p.quantity, ' left!')
+                WHEN p.quantity <= 10 THEN 'Few items remaining!'
+            END AS stock_message
         FROM 
             product p
         JOIN 

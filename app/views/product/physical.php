@@ -24,7 +24,7 @@
                     <tr>
                         <td><?= htmlspecialchars($product->name); ?></td>
                         <td><?= htmlspecialchars($product->quantity); ?></td>
-                        <td>$<?= number_format($product->price, 2); ?></td>
+                        <td>Rs<?= number_format($product->price, 2); ?></td>
                         <td><?= htmlspecialchars($product->category_name); ?></td>
                         <td>
                             <?php if (!empty($product->image_path)): ?>

@@ -357,6 +357,8 @@ public function allProducts($page = 1) {
     $totalPages = ceil($totalProducts / $productsPerPage);
     $categories=$this->product->getAllCategories();
 
+    
+
     $data = [
         'products' => $products,
         'totalPages' => $totalPages,

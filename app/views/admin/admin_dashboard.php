@@ -4,58 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f9f7f5;
-            margin: 0;
-            padding: 0;
-        }
-
-        .dashboard-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 20px;
-            margin: 20px auto;
-            flex-wrap: wrap; /* Wrap charts on smaller screens */
-            padding: 20px;
-            max-width: 1200px;
-        }
-
-        .chart-container {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            flex: 1 1 500px; /* Flex item with equal size */
-            max-width: 500px; /* Maximum width for each chart */
-        }
-
-        canvas {
-            width: 100% !important; /* Adjust canvas to fit container */
-            height: 350px !important; /* Set consistent height */
-        }
-
-        h3 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #333;
-        }
-    </style>
+    .bg-custom {
+        background-color: #f9f7f5;
+    }
+</style>
 </head>
-<body>
-    <div class="dashboard-container">
-        <div class="chart-container">
-            <h3>Sales by Date</h3>
-            <canvas id="lineChart"></canvas>
+<body class="bg-custom">
+<div class="container my-5">
+    <h1 class="text-center mb-4">Dashboard</h1>
+    <div class="row gy-4">
+        <!-- Line Chart -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header text-center bg-primary text-white">
+                    <h5 class="mb-0">Sales by Date</h5>
+                </div>
+                <div class="card-body p-0">
+                    <canvas id="lineChart" class="w-100" style="height: 350px;"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="chart-container">
-            <h3>Sales by Payment Method</h3>
-            <canvas id="pieChart"></canvas>
+        <!-- Pie Chart -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header text-center bg-success text-white">
+                    <h5 class="mb-0">Sales by Payment Method</h5>
+                </div>
+                <div class="card-body p-0">
+                    <canvas id="pieChart" class="w-100" style="height: 350px;"></canvas>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+
 
     <?php
     // Prepare data for Line Chart (Revenue by Date)
@@ -154,5 +138,7 @@
             }
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
